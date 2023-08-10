@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  frontend:
+    container_name: zombie
+    build:
+      # context: ../frontend      # Lieu du dossier 'frontend' dans le projet
+      dockerfile: ./Dockerfile  # Lieu du dockerfile, par rapport au context
+      args:       # Permet au front d'avoir les adresses ip du front et du back
+        VITE_FRONT_URI: zombie/
+        VITE_FRONT_URL: http://51.254.119.241/
+
+    image: portfolio/zombie:frontend
+    restart: always
+    ports:
+      - "127.0.0.1:8082:80"

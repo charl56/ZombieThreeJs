@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite --port 8081",
+    "dev": "vite --port 8082",
     "build": "vite build",
     "preview": "vite preview"
   },

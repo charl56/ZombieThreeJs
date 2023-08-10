@@ -27,7 +27,9 @@
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';    // Pour les animation
     // Plugins
     import { eventBus } from '../../plugins/eventBus'
-    import '../../plugins/ammo'
+
+    // import {Ammo} from '../../plugins/ammo'
+
     // Import datas
     import weapons from '../../../static/datas/weapons'
     import {sceneItems, spawnsCoord, weaponsCoord} from '../../../static/datas/Maps/Map_Zombie_Ville'
@@ -136,6 +138,7 @@
             }
 
             // AmmoJs : création physiques
+            console.log(Ammo)
             var engine = Ammo()
             engine.then(
                 start
