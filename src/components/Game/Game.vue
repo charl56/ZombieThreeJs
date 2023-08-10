@@ -27,9 +27,8 @@
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';    // Pour les animation
     // Plugins
     import { eventBus } from '../../plugins/eventBus'
-
-    // import {Ammo} from '../../plugins/ammo'
-
+    // Ammo
+    import Ammo from 'ammo.js';
     // Import datas
     import weapons from '../../../static/datas/weapons'
     import {sceneItems, spawnsCoord, weaponsCoord} from '../../../static/datas/Maps/Map_Zombie_Ville'
@@ -67,10 +66,9 @@
             eventBus.on('isSound', (data) => {
                 this.isSound.push(data)
             })
-
         },
         mounted() {
-            eventBus.on("restartGame", (data) => {
+            eventBus.on("restartGame", () => {
                 restart()
             })
             ////
@@ -83,6 +81,7 @@
             const canvas = this.$refs.scene                 // Canvas affiche le jeu
             //  AmmoJs : physic
             let physicsWorld, tmpTrans, rigidBodies, cbContactResult, cbContactPairResult
+            let AmmoJs = null
             // Game
             let fpsControls, inventory, indexWeapon, weaponWallArea, actualWeaponWall, hitboxPlayer, zombieKillArea, lavaArea, inLavaTimer, playerInLavaInterval, zoomView, bullets, zoom, keyboard, previousWeapon, round, remainZombie, gameStop, clips, newRound, backgroundSound, backgroundSoundActive
             
@@ -137,11 +136,13 @@
                 isSound = [false]               // Parametre active son
             }
 
+
             // AmmoJs : création physiques
-            console.log(Ammo)
-            var engine = Ammo()
-            engine.then(
-                start
+            new Ammo().then(
+                (ammo) => {
+                    AmmoJs = ammo
+                    start()
+                }
             )
 
             function restart(){
@@ -155,7 +156,7 @@
                 // Moteur de rendu, fait les frame
                 renderFrame()
                 //
-                tmpTrans = new Ammo.btTransform();
+                tmpTrans = new AmmoJs.btTransform();
                 // Physic : Ammo
                 setupPhysicsWorld()
                 // Crée l'élement scene et les différents élement permettant l'affichage
@@ -214,13 +215,13 @@
             ////
             function setupPhysicsWorld(){
                 // J'ai pas tout capté, mais tous les premier éléments sont nécessaires pour la variable physicsWorld (où simulation physique s'effectue)
-                let collisionConfiguration = new Ammo.btDefaultCollisionConfiguration()
-                let dispatcher = new Ammo.btCollisionDispatcher(collisionConfiguration)
-                let overlappingPairCache = new Ammo.btDbvtBroadphase()
-                let solver = new Ammo.btSequentialImpulseConstraintSolver()
+                let collisionConfiguration = new AmmoJs.btDefaultCollisionConfiguration()
+                let dispatcher = new AmmoJs.btCollisionDispatcher(collisionConfiguration)
+                let overlappingPairCache = new AmmoJs.btDbvtBroadphase()
+                let solver = new AmmoJs.btSequentialImpulseConstraintSolver()
                 // Création monde physique
-                physicsWorld = new Ammo.btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
-                physicsWorld.setGravity(new Ammo.btVector3(0, -2, 0));
+                physicsWorld = new AmmoJs.btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
+                physicsWorld.setGravity(new AmmoJs.btVector3(0, -2, 0));
             }
             ////
             // Création de la scene init des élements graphiques
@@ -304,20 +305,20 @@
 
 
                 // Ammojs Section
-                let transform = new Ammo.btTransform();
+                let transform = new AmmoJs.btTransform();
                 transform.setIdentity();
-                transform.setOrigin( new Ammo.btVector3(0, 0, 0));
-                transform.setRotation( new Ammo.btQuaternion(0, 0, 0, 1));
-                let motionState = new Ammo.btDefaultMotionState( transform );
+                transform.setOrigin( new AmmoJs.btVector3(0, 0, 0));
+                transform.setRotation( new AmmoJs.btQuaternion(0, 0, 0, 1));
+                let motionState = new AmmoJs.btDefaultMotionState( transform );
                 // Equivalent hitbox
-                let colShape = new Ammo.btBoxShape( new Ammo.btVector3(35, 0.1, 35));
+                let colShape = new AmmoJs.btBoxShape( new AmmoJs.btVector3(35, 0.1, 35));
                 colShape.setMargin( 0.05 );
 
-                let localInertia = new Ammo.btVector3( 0, 0, 0 );
+                let localInertia = new AmmoJs.btVector3( 0, 0, 0 );
                 colShape.calculateLocalInertia( 0, localInertia );
 
-                let rbInfo = new Ammo.btRigidBodyConstructionInfo( 0, motionState, colShape, localInertia );
-                let body = new Ammo.btRigidBody( rbInfo );
+                let rbInfo = new AmmoJs.btRigidBodyConstructionInfo( 0, motionState, colShape, localInertia );
+                let body = new AmmoJs.btRigidBody( rbInfo );
                 //
                 body.setFriction(4);
                 body.setRollingFriction(10);
@@ -368,35 +369,35 @@
                         //// -------------------
                         // ------ AMMOJS SECTION
                         let mass = 0    // Mass=0 : objet immobile
-                        let transform = new Ammo.btTransform()
+                        let transform = new AmmoJs.btTransform()
                         transform.setIdentity()
                         // Position
-                        transform.setOrigin( new Ammo.btVector3(
+                        transform.setOrigin( new AmmoJs.btVector3(
                             sceneItem.hitBoxPosition.x,
                             sceneItem.hitBoxPosition.y,
                             sceneItem.hitBoxPosition.z
                         ));
                         // Rotation
-                        transform.setRotation( new Ammo.btQuaternion(
+                        transform.setRotation( new AmmoJs.btQuaternion(
                             sceneItem.rotation.x,
                             sceneItem.rotation.y,
                             sceneItem.rotation.z,
                             1
                         ));
-                        let motionState = new Ammo.btDefaultMotionState( transform );
+                        let motionState = new AmmoJs.btDefaultMotionState( transform );
                         // Equivalent hitbox
-                        let colShape = new Ammo.btBoxShape( new Ammo.btVector3(
+                        let colShape = new AmmoJs.btBoxShape( new AmmoJs.btVector3(
                             sceneItem.hitBox.x,
                             sceneItem.hitBox.y,
                             sceneItem.hitBox.z,
                         ));
                         colShape.setMargin( 0.05 );
                         // Inertie
-                        let localInertia = new Ammo.btVector3( 0, 0, 0 );
+                        let localInertia = new AmmoJs.btVector3( 0, 0, 0 );
                         colShape.calculateLocalInertia( mass, localInertia );
                         // Création de l'element physique, avec ses attributs
-                        let rbInfo = new Ammo.btRigidBodyConstructionInfo( mass, motionState, colShape, localInertia );
-                        let body = new Ammo.btRigidBody( rbInfo );
+                        let rbInfo = new AmmoJs.btRigidBodyConstructionInfo( mass, motionState, colShape, localInertia );
+                        let body = new AmmoJs.btRigidBody( rbInfo );
                         // Ajout du body au monde physique, avec contraintes de colisions
                         physicsWorld.addRigidBody( body );
 
@@ -500,35 +501,35 @@
 
                             /////////////////////////
                             // ----------------AMMOJS
-                            let transform = new Ammo.btTransform()
+                            let transform = new AmmoJs.btTransform()
                             transform.setIdentity()
                             // Position
-                            transform.setOrigin( new Ammo.btVector3(
+                            transform.setOrigin( new AmmoJs.btVector3(
                                 pos.x,
                                 pos.y,
                                 pos.z,
                             ));
                             // Rotation
-                            transform.setRotation( new Ammo.btQuaternion(
+                            transform.setRotation( new AmmoJs.btQuaternion(
                                 quat.x,
                                 quat.y,
                                 quat.z,
                                 quat.w,
                             ));
-                            let motionState = new Ammo.btDefaultMotionState( transform );
+                            let motionState = new AmmoJs.btDefaultMotionState( transform );
                             // Hitbox
-                            let colShape = new Ammo.btBoxShape( new Ammo.btVector3(
+                            let colShape = new AmmoJs.btBoxShape( new AmmoJs.btVector3(
                                 scale.x * 0.8,
                                 2,
                                 scale.z * 0.8,
                             ));
                             colShape.setMargin( 0.05 );
                             // Inertie
-                            let localInertia = new Ammo.btVector3( 0, 0, 0 );
+                            let localInertia = new AmmoJs.btVector3( 0, 0, 0 );
                             colShape.calculateLocalInertia( mass, localInertia );
                             // Création de l'element physique, avec ses attributs
-                            let rbInfo = new Ammo.btRigidBodyConstructionInfo( mass, motionState, colShape, localInertia );
-                            let body = new Ammo.btRigidBody( rbInfo );
+                            let rbInfo = new AmmoJs.btRigidBodyConstructionInfo( mass, motionState, colShape, localInertia );
+                            let body = new AmmoJs.btRigidBody( rbInfo );
                             // Ajout du body au monde physique, avec contraintes de colisions
                             physicsWorld.addRigidBody( body );
 
@@ -817,37 +818,37 @@
                             //// -------------------
                             // ------ AMMOJS SECTION
                             let mass = 1    // Mass=0 : objet immobile
-                            let transform = new Ammo.btTransform()
+                            let transform = new AmmoJs.btTransform()
                             transform.setIdentity()
                             // Position de départ de la balle, en fonction de la vue (visé ou non)
-                            transform.setOrigin( new Ammo.btVector3(
+                            transform.setOrigin( new AmmoJs.btVector3(
                                 bulletPos.x,
                                 bulletPos.y,
                                 bulletPos.z
                             ));
                             // Rotation
-                            transform.setRotation( new Ammo.btQuaternion(
+                            transform.setRotation( new AmmoJs.btQuaternion(
                                 camera.rotation.x,
                                 camera.rotation.y + Math.PI/2,
                                 camera.rotation.z,
                                 1
                             ));
-                            let motionState = new Ammo.btDefaultMotionState( transform );
+                            let motionState = new AmmoJs.btDefaultMotionState( transform );
                             // Object autour, qui va avoir la colision
-                            let colShape = new Ammo.btBoxShape( new Ammo.btVector3( 0.1, 0.1, 0.1));
+                            let colShape = new AmmoJs.btBoxShape( new AmmoJs.btVector3( 0.1, 0.1, 0.1));
                             colShape.setMargin( 0.05 );
                             // Inertie
-                            let localInertia = new Ammo.btVector3( 0, 0, 0 );
+                            let localInertia = new AmmoJs.btVector3( 0, 0, 0 );
                             colShape.calculateLocalInertia( mass, localInertia );
                             // Création de l'element physique, avec ses attributs
-                            let rbInfo = new Ammo.btRigidBodyConstructionInfo( mass, motionState, colShape, localInertia );
-                            let body = new Ammo.btRigidBody( rbInfo );
+                            let rbInfo = new AmmoJs.btRigidBodyConstructionInfo( mass, motionState, colShape, localInertia );
+                            let body = new AmmoJs.btRigidBody( rbInfo );
                             // Ajout du body au monde physique, avec contraintes de colisions
                             physicsWorld.addRigidBody( body );
                             // Place balle et donne la velocite
                             tmpPos.copy(raycaster.ray.direction)
                             tmpPos.multiplyScalar(60)
-                            body.setLinearVelocity(new Ammo.btVector3(
+                            body.setLinearVelocity(new AmmoJs.btVector3(
                                 tmpPos.x,
                                 tmpPos.y,
                                 tmpPos.z
@@ -1049,18 +1050,18 @@
             // Contact entre 2 physicBody
             ////
             function setupContactResultCallback(){
-                cbContactResult = new Ammo.ConcreteContactResultCallback();
+                cbContactResult = new AmmoJs.ConcreteContactResultCallback();
                 cbContactResult.addSingleResult = function(cp, colObj0Wrap, partId0, index0, colObj1Wrap, partId1, index1){
 
-                    let contactPoint = Ammo.wrapPointer( cp, Ammo.btManifoldPoint );
+                    let contactPoint = AmmoJs.wrapPointer( cp, AmmoJs.btManifoldPoint );
                     const distance = contactPoint.getDistance();
                     if( distance > 0 ) return;
 
-                    let colWrapper0 = Ammo.wrapPointer( colObj0Wrap, Ammo.btCollisionObjectWrapper );
-                    let rb0 = Ammo.castObject( colWrapper0.getCollisionObject(), Ammo.btRigidBody );
+                    let colWrapper0 = AmmoJs.wrapPointer( colObj0Wrap, AmmoJs.btCollisionObjectWrapper );
+                    let rb0 = AmmoJs.castObject( colWrapper0.getCollisionObject(), AmmoJs.btRigidBody );
 
-                    let colWrapper1 = Ammo.wrapPointer( colObj1Wrap, Ammo.btCollisionObjectWrapper );
-                    let rb1 = Ammo.castObject( colWrapper1.getCollisionObject(), Ammo.btRigidBody );
+                    let colWrapper1 = AmmoJs.wrapPointer( colObj1Wrap, AmmoJs.btCollisionObjectWrapper );
+                    let rb1 = AmmoJs.castObject( colWrapper1.getCollisionObject(), AmmoJs.btRigidBody );
 
                     let threeObject0 = rb0.threeObject;
                     let threeObject1 = rb1.threeObject;
@@ -1141,11 +1142,11 @@
             }
             function setupContactPairResultCallback(){
 
-                cbContactPairResult = new Ammo.ConcreteContactResultCallback();
+                cbContactPairResult = new AmmoJs.ConcreteContactResultCallback();
                 cbContactPairResult.hasContact = false;
                 cbContactPairResult.addSingleResult = function(cp, colObj0Wrap, partId0, index0, colObj1Wrap, partId1, index1){
 
-                    let contactPoint = Ammo.wrapPointer( cp, Ammo.btManifoldPoint );
+                    let contactPoint = AmmoJs.wrapPointer( cp, AmmoJs.btManifoldPoint );
                     const distance = contactPoint.getDistance();
                     if( distance > 0 ) return;
 
@@ -1320,7 +1321,7 @@
                         // Si zombie sur la cam, on fait rien
                         if( moveX == 0 && moveZ == 0) return;
                         // Sinon vecteur dans la direction
-                        let resultantImpulse = new Ammo.btVector3( moveX, 0 , moveZ )
+                        let resultantImpulse = new AmmoJs.btVector3( moveX, 0 , moveZ )
                         resultantImpulse.op_mul(scalingFactor);
                         // Assignation vecteur pour déplacement
                         let physicsBody = rigidBodies[i].userData.physicsBody;

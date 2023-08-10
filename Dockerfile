@@ -15,7 +15,7 @@ RUN npm install
 
 # Copy everything else for build
 COPY src/ ./src
-COPY static/ ./static
+COPY static/datas/ ./static/datas
 COPY vite.config.js ./
 COPY index.html ./
 
@@ -26,7 +26,8 @@ ARG VITE_FRONT_URL=$VITE_FRONT_URL
 # build app for production with minification
 RUN npm run build
 
-COPY images/ /app/dist/images
+# Data game
+COPY static/ app/dist/static
 
 # production stage
 FROM nginx:stable-alpine as production-stage
