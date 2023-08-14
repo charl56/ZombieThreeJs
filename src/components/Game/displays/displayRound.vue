@@ -60,10 +60,19 @@ export default {
         setRoundDigit(){
             // Si 1 ou 2 chiffre dans le nombre de la manche
             if(this.round.length == 1){
-                this.firstDigitImg = new URL('../../../static/Game/Round_'+this.round[0]+'.png', import.meta.url).href
+                if(import.meta.env.DEV){
+                    this.firstDigitImg = new URL('../../../../static/Game/Round_'+this.round[0]+'.png', import.meta.url).href
+                } else {
+                    this.firstDigitImg = new URL('./static/Game/Round_'+this.round[0]+'.png', import.meta.url).href
+                }
             } else {
-                this.firstDigitImg = new URL('../../../static/Game/Round_'+this.round[0]+'.png', import.meta.url).href
-                this.secondDigitImg = new URL('../../../static/Game/Round_'+this.round[1]+'.png', import.meta.url).href
+                if(import.meta.env.DEV){
+                    this.firstDigitImg = new URL('../../../../static/Game/Round_'+this.round[0]+'.png', import.meta.url).href
+                    this.secondDigitImg = new URL('../../../../static/Game/Round_'+this.round[1]+'.png', import.meta.url).href
+                } else {
+                    this.firstDigitImg = new URL('./static/Game/Round_'+this.round[0]+'.png', import.meta.url).href
+                    this.secondDigitImg = new URL('./static/Game/Round_'+this.round[1]+'.png', import.meta.url).href
+                }
             }
 
 

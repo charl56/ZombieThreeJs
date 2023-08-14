@@ -9,20 +9,21 @@
 <script>
 
 export default {
-    name: 'AppProjetComponent',
+    name: 'AppDisplayLoader',
     created(){
     }
     ,
     props: {
         loader: Number,
         remainLoaders: Number,
+        remainBullets: Number,
         loadTimer: Number,
     },
     mounted(){ // Lance la fonction au chargement de la page
     },
     data () {
         return {
-            loaderValue: 0
+            loaderValue: 0,
         }
     },
     watch: {        // Listener sur une props, ici le nombre de balles restantes 

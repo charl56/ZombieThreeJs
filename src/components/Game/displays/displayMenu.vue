@@ -48,7 +48,8 @@ export default {
             eventBus.emit("restartGame")
         },
         backPortfolio(){
-            eventBus.emit("gameOn", false)
+            location = location.host
+
         }
     },
     computed: {
