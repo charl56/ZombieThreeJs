@@ -5,8 +5,8 @@
                     <v-img class="icon-viseur" :src="viseur"></v-img>
                 </div>
             </div>
-            <!-- Affiche le score -->
-            <displayScore class="display-component" :score="score" />
+            <!-- Affiche le score et l'argent-->
+            <displayScore class="display-component" :score="score" :money="money" />
             <!-- Affiche les balles restantes -->
             <displayLoader class="display-component" :remainBullets="remainBullets" :loader="loader" :remainLoaders="remainLoaders" :loadTimer="weapons[this.player.weapon].parameters.loadTimer" />
             <!-- Affiche le nombre de round -->
@@ -56,6 +56,11 @@
             eventBus.on('scoreChange', (data) => {
                 this.score = data
             });
+            // MAJ Money
+            eventBus.on('moneyChange', (data) => {
+                this.money = data
+            })
+
             // MAJ balles restantes
             eventBus.on('remainBullets', (data) => {
                 this.remainBullets = data[0]
@@ -87,6 +92,7 @@
             
             let player = this.player
             let score = this.score
+            let money = this.money
             let isSound = this.isSound               // Parametre active son
 
             // Mise en place du viseur
@@ -132,7 +138,7 @@
                 newRound = null                            // Pour savoir nouvelle manches
                 backgroundSound = null                     // Son de fond
                 backgroundSoundActive = false
-                score = 0
+                score = money = 0
                 isSound = [false]               // Parametre active son
             }
 
@@ -938,7 +944,7 @@
                     backgroundSoundPlay()
                 }
                 // Permet d'achter une arme sur un mur : F
-                if(keyboard[70] && actualWeaponWall != null && weapons[actualWeaponWall].price <= score){
+                if(keyboard[70] && actualWeaponWall != null && weapons[actualWeaponWall].price <= money){
                     // Si on a 1 couteau et 1 arme dans inventaire, on ajout directement
                     if(inventory.length < 3){
                         inventory.push(actualWeaponWall)
@@ -977,9 +983,9 @@
                             setWeapon(indexWeapon)
                         }
                     }
-                    // On met à jour le score
-                    score -= weapons[actualWeaponWall].price
-                    eventBus.emit("scoreChange", score)
+                    // On met à jour le money
+                    money -= weapons[actualWeaponWall].price
+                    eventBus.emit("moneyChange", money)
                     // On met à jour l'affichage des balles
                     eventBus.emit("remainBullets", ([weapons[inventory[indexWeapon]].parameters.remainBullets, weapons[inventory[indexWeapon]].parameters.remainLoaders, weapons[inventory[indexWeapon]].parameters.loader]))
                 }
@@ -1001,9 +1007,6 @@
                             physicsWorld.removeRigidBody(sceneObject.userData.physicsBody)
                             // On enleve la partie graphic
                             scene.remove(sceneObject)
-                            // A la mort : 100 points
-                            score += 100
-                            eventBus.emit("scoreChange", score)
                             // On decremente le nombre de zombie restant
                             remainZombie = remainZombie - 1
                         }
@@ -1100,6 +1103,8 @@
                                                 // On enleve la partie graphic
                                                 scene.remove(threeObject1)
                                                 // A la mort : 100 points
+                                                money += 100
+                                                eventBus.emit("moneyChange", money)
                                                 score += 100
                                                 eventBus.emit("scoreChange", score)
                                                 // On decremente le nombre de zombie restant
@@ -1560,6 +1565,7 @@
                 player: {height: 1.8, canShoot: true, canJump: true, speed: 0.065, turnSpeed: Math.PI*0.02, alive: true, weapon: 'pistolSilencer', weaponMesh: null},
                 viseur: '',         // Change la couleur du viseur
                 score: 0,                   // Score du jeu
+                money: 0,
                 remainBullets: 0,
                 remainLoaders: 0,
                 loader: 0,
