@@ -4,7 +4,7 @@
     </div>   
     <div v-else class="death-score mt-7 d-flex align-start justify-center">
         <p class="p-death-score mx-6 px-2 py-0">Vous êtes mort</p>
-        <!-- <p class="p-death-score mx-6 px-2 py-0">Score : {{ score }}</p> -->
+        <p class="p-death-score mx-6 px-2 py-0">Score : {{ score }}</p>
     </div>  
 </template>
 
@@ -54,18 +54,18 @@ export default {
 .p-score{
     color: white;
 }.p-death-score{
-    background-color: rgb(169, 169, 169);
     border-radius: 10px;
     font-size: 200%;
+    color: white;
     animation-name: changeSize;
     animation-iteration-count: infinite;
     transition: none;
     animation-duration: 1.5s;
 }
 @keyframes changeSize {
-  0%   { font-size: 200%; }
-  40%   { font-size: 220%; }
-  100% { font-size: 200%; }
+  0%   { transform: scale(1); }
+  50%   { transform: scale(1.05); }
+  100% { transform: scale(1); }
 }
 
 </style>

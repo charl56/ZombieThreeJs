@@ -48,8 +48,7 @@ export default {
             eventBus.emit("restartGame")
         },
         backPortfolio(){
-            location = location.host
-
+            location.pathname = "/charles/"
         }
     },
     computed: {

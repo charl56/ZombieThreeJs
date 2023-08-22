@@ -1,20 +1,38 @@
 <template>
   <v-app id="app">
+      <Presentation v-if="presentation" />
       <!-- Jeu -->
-      <Game />
+      <Game v-else />
   </v-app>
 </template>
 
 <script>
 import Game from './components/Game/Game.vue'
+import Presentation from './components/Presentation/Presentation.vue'
 
 import { eventBus } from './plugins/eventBus'
 
 export default {
   name: 'App',
   components: {
-    Game
+    Presentation,
+    Game,
   },
+  created(){
+    if(import.meta.env.DEV){  // Permet de ne pas avoir les message en mode dev
+      this.presentation = false
+    }
+    
+
+    eventBus.on("startGame", () => {
+      this.presentation = false
+    })
+  },
+  data(){
+    return {
+      presentation: true,
+    }
+  }
 }
 </script>
 
@@ -27,7 +45,7 @@ html::-webkit-scrollbar {
 html {
   margin: 0;
   height: 100%;
-  background-color: #FFF2DC;
+  background-color: #ffffff;
   /* Hide scrollbar for IE, Edge and Firefox */
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
@@ -38,7 +56,7 @@ html {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  background-color: #FFF2DC !important;
+  background-color: #ffffff !important;
   top: 0;
   right: 0;
   bottom: 0;
@@ -46,11 +64,11 @@ html {
 }
 /* Surlignage du texte */
 ::selection{
-  background-color: #ebe5dc;
+  background-color: #ffffff;
   color: #7eb3e8;
 }
 ::-moz-selection{
-  background-color: #ebe5dc;
+  background-color: #ffffff;
   color: #2c3e50;
 }
 </style>

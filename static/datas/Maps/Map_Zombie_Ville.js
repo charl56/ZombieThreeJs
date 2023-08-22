@@ -765,8 +765,8 @@ let sceneItems = {
         }
     },
     WallA_Window4: {
-        obj: './static/Models/Retro_Urban/Models/WallA_Window.obj',      // Item
-        mtl: './static/Models/Retro_Urban/Models/WallA_Window.mtl',      // Item
+        obj: './static/Models/Retro_Urban/Models/wallA_window.obj',      // Item
+        mtl: './static/Models/Retro_Urban/Models/wallA_window.mtl',      // Item
         mesh: null,                                         // Données de l'affichage de l'item
         position: {                 // Position de l'item
             x: 19,
@@ -791,8 +791,8 @@ let sceneItems = {
         }
     },
     WallA_Window5: {
-        obj: './static/Models/Retro_Urban/Models/WallA_Window.obj',      // Item
-        mtl: './static/Models/Retro_Urban/Models/WallA_Window.mtl',      // Item
+        obj: './static/Models/Retro_Urban/Models/wallA_window.obj',      // Item
+        mtl: './static/Models/Retro_Urban/Models/wallA_window.mtl',      // Item
         mesh: null,                                         // Données de l'affichage de l'item
         position: {                 // Position de l'item
             x: 11,
@@ -817,8 +817,8 @@ let sceneItems = {
         }
     },
     WallA_Window6: {
-        obj: './static/Models/Retro_Urban/Models/WallA_Window.obj',      // Item
-        mtl: './static/Models/Retro_Urban/Models/WallA_Window.mtl',      // Item
+        obj: './static/Models/Retro_Urban/Models/wallA_window.obj',      // Item
+        mtl: './static/Models/Retro_Urban/Models/wallA_window.mtl',      // Item
         mesh: null,                                         // Données de l'affichage de l'item
         position: {                 // Position de l'item
             x: -5,
@@ -843,8 +843,8 @@ let sceneItems = {
         }
     },
     WallA_Window7: {
-        obj: './static/Models/Retro_Urban/Models/WallA_Window.obj',      // Item
-        mtl: './static/Models/Retro_Urban/Models/WallA_Window.mtl',      // Item
+        obj: './static/Models/Retro_Urban/Models/wallA_window.obj',      // Item
+        mtl: './static/Models/Retro_Urban/Models/wallA_window.mtl',      // Item
         mesh: null,                                         // Données de l'affichage de l'item
         position: {                 // Position de l'item
             x: -5,
@@ -1285,8 +1285,8 @@ let sceneItems = {
         }
     },
     WallA14: {
-        obj: './static/Models/Retro_Urban/Models/WallA_Window.obj',      // Item
-        mtl: './static/Models/Retro_Urban/Models/WallA_Window.mtl',      // Item
+        obj: './static/Models/Retro_Urban/Models/wallA_window.obj',      // Item
+        mtl: './static/Models/Retro_Urban/Models/wallA_window.mtl',      // Item
         mesh: null,                                         // Données de l'affichage de l'item
         position: {                 // Position de l'item
             x: 19,

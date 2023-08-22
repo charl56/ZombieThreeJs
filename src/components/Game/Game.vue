@@ -75,7 +75,7 @@
             // VARIABLES
             ////
             // Ecrans de chargement
-            let ressourcesLoad, loadingScreen, deathScreen
+            let ressourcesLoad, deathScreen
             // ThreeJs : graphic
             let scene, camera, clock, deltaTime, weaponActuel, renderer, raycaster, tmpPos, mixers
             const canvas = this.$refs.scene                 // Canvas affiche le jeu
@@ -98,7 +98,7 @@
             async function initVariable(){
                 // loading et death screen
                 ressourcesLoad = false
-                loadingScreen = deathScreen = null
+                deathScreen = null
                 // ThreeJs : graphic
                 scene = camera = clock = deltaTime = weaponActuel = null
                 renderer = new THREE.WebGLRenderer()        // Fonction de rendu
@@ -136,7 +136,6 @@
                 isSound = [false]               // Parametre active son
             }
 
-
             // AmmoJs : création physiques
             new Ammo().then(
                 (ammo) => {
@@ -151,10 +150,6 @@
             async function start(){
                 // On commence par init les variables
                 await initVariable()
-                // On commence par afficher l'ecran de chargemement
-                loadScreen()
-                // Moteur de rendu, fait les frame
-                renderFrame()
                 //
                 tmpTrans = new AmmoJs.btTransform();
                 // Physic : Ammo
@@ -163,6 +158,8 @@
                 setupGraphics()
                 // Prepare anim de la mort
                 deathScreenAnim()
+                // Moteur de rendu, fait les frame
+                renderFrame()
                 // Ajout les élement à la scene
                 await initScene()
                 // Ajout des cibles
@@ -181,23 +178,6 @@
                 // Check si joueur dans la lave
                 checkPlayerInLava()
             }
-            ////
-            // Loading screen
-            ////
-            function loadScreen(){
-                loadingScreen = {
-                    scene: new THREE.Scene(),
-                    camera: new THREE.PerspectiveCamera(90, 1280/720, 0.1, 100),
-                    box: new THREE.Mesh(
-                        new THREE.BoxGeometry(0.5, 0.5, 0.5),
-                        new THREE.MeshBasicMaterial({ color:0x4444ff })
-                    )
-                }
-                // Préparation de l'écran de chargement
-                loadingScreen.box.position.set(0, 0, 5)
-                loadingScreen.camera.lookAt(0, 0, 5)
-                loadingScreen.scene.add(loadingScreen.box)
-            }
             //////////////////
             // Ecran anim mort
             //////////////////
@@ -208,7 +188,7 @@
                 }
                 // Préparation de l'écran de chargement
                 deathScreen.camera.rotation.set(0, Math.PI, 0)
-                deathScreen.camera.position.set(0, 12, -11)
+                deathScreen.camera.position.set(0, 0, 0)
             }
             ////
             // Setup AmmoJs
@@ -1177,31 +1157,20 @@
 
                 // Ecran de chargement
                 if(!ressourcesLoad){
-                    requestAnimationFrame(renderFrame)
-                    // Mouvement de la box
-                    loadingScreen.box.position.x -= 0.05
-                    if(loadingScreen.box.position.x < -10) loadingScreen.box.position.x = 10
-                    loadingScreen.box.position.y = Math.sin(loadingScreen.box.position.x)
-
-                    renderer.render(loadingScreen.scene, loadingScreen.camera)
-                    return
-                } else if(!player.alive || gameStop){
-                    requestAnimationFrame(renderFrame)
-                    // Mouvement de la box
-                    deathScreen.camera.position.x -= 0.07
-
-                    if(deathScreen.camera.position.x < -10) deathScreen.camera.position.x = 13
-                    deathScreen.camera.position.y = Math.sin(deathScreen.camera.position.x) + 12
-
+                    deathScreen.camera.position.set(3, 12, -17)
+                    deathScreen.camera.lookAt(3, 3, 0)
+                    renderer.render(deathScreen.scene, deathScreen.camera)
+                    requestAnimationFrame(renderFrame);
+                } else if(!player.alive || gameStop ){
+                    deathScreen.camera.position.set(0, 12, -11)
                     renderer.render(deathScreen.scene, deathScreen.camera)
                     // return
                 } else {
-                    // console.log(parseInt(camera.position.x), parseInt(camera.position.z))
-
                     // Marche ralentie par la lave, sprint ou marche normal
                     if(player.speed == 4){
                         fpsControls.playerSpeed = 4
                     } else if(keyboard[16]){
+                        player.speed = 11
                         fpsControls.playerSpeed = 11
                     } else {
                         fpsControls.playerSpeed = 7
@@ -1620,26 +1589,6 @@
 }.menu-color:hover{
     cursor: pointer;
     background-color: red;
-}
-/* Couleurs pour le viseur */
-.color{
-    width: 20px;
-    height: 20px;
-    color: grey;
-}.white{
-    background-color: white;
-}.red{
-    background-color: red;
-}.yellow{
-    background-color: yellow;
-}.green{
-    background-color: green;
-}.blue{
-    background-color: blue;
-}.purple{
-    background-color: purple;
-}.black{
-    background-color: black;
 }
 /* Viseur */
 .viseur{

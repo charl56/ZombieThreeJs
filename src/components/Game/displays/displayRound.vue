@@ -63,20 +63,17 @@ export default {
                 if(import.meta.env.DEV){
                     this.firstDigitImg = new URL('../../../../static/Game/Round_'+this.round[0]+'.png', import.meta.url).href
                 } else {
-                    this.firstDigitImg = new URL('./static/Game/Round_'+this.round[0]+'.png', import.meta.url).href
+                    this.firstDigitImg = './static/Game/Round_'+this.round[0]+'.png'
                 }
             } else {
                 if(import.meta.env.DEV){
                     this.firstDigitImg = new URL('../../../../static/Game/Round_'+this.round[0]+'.png', import.meta.url).href
                     this.secondDigitImg = new URL('../../../../static/Game/Round_'+this.round[1]+'.png', import.meta.url).href
                 } else {
-                    this.firstDigitImg = new URL('./static/Game/Round_'+this.round[0]+'.png', import.meta.url).href
-                    this.secondDigitImg = new URL('./static/Game/Round_'+this.round[1]+'.png', import.meta.url).href
+                    this.firstDigitImg = './static/Game/Round_'+this.round[0]+'.png'
+                    this.secondDigitImg = './static/Game/Round_'+this.round[1]+'.png'
                 }
-            }
-
-
-            
+            }            
         }
     },
     computed: {
