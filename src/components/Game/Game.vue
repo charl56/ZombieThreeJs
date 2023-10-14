@@ -25,6 +25,8 @@
     import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';      // //
     import { RGBELoader } from 'three/addons/loaders/RGBELoader.js'     // Image 360
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';    // Pour les animation
+    import Stats from 'three/examples/jsm/libs/stats.module'            // FPS
+
     // Plugins
     import { eventBus } from '../../plugins/eventBus'
     // Ammo
@@ -82,7 +84,7 @@
             // Ecrans de chargement
             let ressourcesLoad, deathScreen
             // ThreeJs : graphic
-            let scene, camera, clock, deltaTime, weaponActuel, renderer, raycaster, tmpPos, mixers
+            let scene, camera, clock, deltaTime, weaponActuel, renderer, raycaster, tmpPos, mixers, stats
             const canvas = this.$refs.scene                 // Canvas affiche le jeu
             //  AmmoJs : physic
             let physicsWorld, tmpTrans, rigidBodies, cbContactResult, cbContactPairResult
@@ -105,6 +107,9 @@
                 // loading et death screen
                 ressourcesLoad = false
                 deathScreen = null
+                // fps
+                stats = new Stats()
+                document.body.appendChild(stats.dom)
                 // ThreeJs : graphic
                 scene = camera = clock = deltaTime = weaponActuel = null
                 renderer = new THREE.WebGLRenderer()        // Fonction de rendu
@@ -156,6 +161,7 @@
             async function start(){
                 // On commence par init les variables
                 await initVariable()
+                document.body.requestPointerLock();
                 //
                 tmpTrans = new AmmoJs.btTransform();
                 // Physic : Ammo
@@ -928,13 +934,16 @@
 
             function keyUse(){
                 if(keyboard[27]){       // Esc, menu pause
+                    console.log(gameStop)
                     if(!gameStop){
                         gameStop = true
+                        // document.exitPointerLock();
                     } else {
                         if(!(isSound[isSound.length - 1])){
                             backgroundSound.pause()
                         }
                         gameStop = false
+                        // document.body.requestPointerLock();
                         renderFrame()
                     }
                     eventBus.emit("gameStop", gameStop)
@@ -1159,7 +1168,7 @@
             // Moteur de rendu, fait les frames
             ////
             function renderFrame() {
-
+                stats.update()
                 // Ecran de chargement
                 if(!ressourcesLoad){
                     deathScreen.camera.position.set(3, 12, -17)
@@ -1423,15 +1432,13 @@
                 }
 
                 onMouseMove_(e) {
-                    this.current_.mouseX = e.pageX - window.innerWidth / 2;
-                    this.current_.mouseY = e.pageY - window.innerHeight / 2;
 
                     if (this.previous_ === null) {
-                    this.previous_ = {...this.current_};
+                        this.previous_ = {...this.current_};
                     }
 
-                    this.current_.mouseXDelta = this.current_.mouseX - this.previous_.mouseX;
-                    this.current_.mouseYDelta = this.current_.mouseY - this.previous_.mouseY;
+                    this.current_.mouseXDelta = e.movementX
+                    this.current_.mouseYDelta = e.movementY
                 }
 
                 onKeyDown_(e) {

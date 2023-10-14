@@ -14,7 +14,6 @@
         </v-row>
         <v-row class="justify-center mt-10">
             <v-btn class="btn-restart mx-2" variant="outlined" @click="restart()">Recommencer</v-btn>
-            <v-btn class="btn-restart mx-2" variant="outlined" @click="backPortfolio()">Retour au portfolio</v-btn>
         </v-row>
     </v-dialog> 
 </template>
@@ -47,9 +46,6 @@ export default {
             this.gameStop = false
             eventBus.emit("restartGame")
         },
-        backPortfolio(){
-            location.pathname = "/charles/"
-        }
     },
     computed: {
     }
