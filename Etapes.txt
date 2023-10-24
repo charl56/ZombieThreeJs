@@ -1,0 +1,3 @@
+Stats kills
+    Séparer de l'argent pour bien afficher les stats a la fin
+Murs invisibles pour pas sortir de la map

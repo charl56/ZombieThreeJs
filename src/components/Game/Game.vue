@@ -29,6 +29,7 @@
 
     // Plugins
     import { eventBus } from '../../plugins/eventBus'
+    import { FirstPersonCamera } from '../../plugins/FirstPersonCamera';
     // Ammo
     import Ammo from 'ammo.js';
     // Import datas
@@ -69,10 +70,6 @@
                 this.remainLoaders = data[1]
                 this.loader = data[2]
             })
-            // MAJ sound
-            eventBus.on('isSound', (data) => {
-                this.isSound.push(data)
-            })
         },
         mounted() {
             eventBus.on("restartGame", () => {
@@ -95,7 +92,6 @@
             let player = this.player
             let score = this.score
             let money = this.money
-            let isSound = this.isSound               // Parametre active son
 
             // Mise en place du viseur
             this.viseur = new URL('../../assets/Icons/viseur_white.png', import.meta.url).href
@@ -144,7 +140,6 @@
                 backgroundSound = null                     // Son de fond
                 backgroundSoundActive = false
                 score = money = 0
-                isSound = [false]               // Parametre active son
             }
 
             // AmmoJs : création physiques
@@ -243,7 +238,7 @@
 
                 // Hitbox pour les zones d'armes
                 hitboxPlayer = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
-                // hitboxPlayer.setFromCenterAndSize(camera.position, new THREE.Vector3(0.8, 2, 0.8))
+                hitboxPlayer.setFromCenterAndSize(camera.position, new THREE.Vector3(0.8, 2, 0.8))
                 // Ambient light
                 let ambientLight = new THREE.AmbientLight(0xFFD8C4, 0.5)
                 scene.add(ambientLight)
@@ -856,7 +851,7 @@
                             ////
                             // Son au tire
                             ////
-                            if((isSound[isSound.length - 1])){
+                            if(backgroundSoundActive){
 
                                 const listener = new THREE.AudioListener()
                                 camera.add(listener)
@@ -933,23 +928,19 @@
             }
 
             function keyUse(){
-                if(keyboard[27]){       // Esc, menu pause
-                    console.log(gameStop)
+                if(keyboard[80]){       // Esc, menu pause
                     if(!gameStop){
                         gameStop = true
-                        // document.exitPointerLock();
+                        document.exitPointerLock();
                     } else {
-                        if(!(isSound[isSound.length - 1])){
-                            backgroundSound.pause()
-                        }
                         gameStop = false
-                        // document.body.requestPointerLock();
+                        document.body.requestPointerLock();
                         renderFrame()
                     }
                     eventBus.emit("gameStop", gameStop)
                 }
                 // Active le son de fond
-                if(keyboard[80]){   // P
+                if(keyboard[13]){   // P
                     backgroundSoundPlay()
                 }
                 // Permet d'achter une arme sur un mur : F
@@ -1027,14 +1018,12 @@
 
 
             function backgroundSoundPlay(){
-                if((isSound[isSound.length - 1])){
-                    if(backgroundSoundActive){
-                        backgroundSound.pause()
-                    } else{
-                        backgroundSound.play()
-                    }
-                    backgroundSoundActive = !backgroundSoundActive
+                if(backgroundSoundActive){
+                    backgroundSound.pause()
+                } else{
+                    backgroundSound.play()
                 }
+                backgroundSoundActive = !backgroundSoundActive
             }
 
 
@@ -1175,10 +1164,11 @@
                     deathScreen.camera.lookAt(3, 3, 0)
                     renderer.render(deathScreen.scene, deathScreen.camera)
                     requestAnimationFrame(renderFrame);
+                    return
                 } else if(!player.alive || gameStop ){
                     deathScreen.camera.position.set(0, 12, -11)
                     renderer.render(deathScreen.scene, deathScreen.camera)
-                    // return
+                    return
                 } else {
                     // Marche ralentie par la lave, sprint ou marche normal
                     if(player.speed == 4){
@@ -1394,176 +1384,12 @@
             // Mort du joueur
             function death(){
                 player.alive = false
+                document.exitPointerLock();
                 eventBus.emit("playerDeath")
             }
 
             ///////////////////////////////////////////////////////////
             // Class controle POV
-            const KEYS = {
-                'z': 90,
-                's': 83,
-                'q': 81,
-                'd': 68,
-            };
-
-            function clamp(x, a, b) {
-                return Math.min(Math.max(x, a), b);
-            }
-
-            class InputController {
-                constructor(target) {
-                    this.target_ = target || document;
-                    this.initialize_();
-                }
-
-                initialize_() {
-                    this.current_ = {
-                    mouseXDelta: 0,
-                    mouseYDelta: 0,
-                    mouseX: 0,
-                    mouseY: 0,
-                    };
-                    this.previous_ = null;
-                    this.keys_ = {};
-                    this.previousKeys_ = {};
-                    this.target_.addEventListener('mousemove', (e) => this.onMouseMove_(e), false);
-                    this.target_.addEventListener('keydown', (e) => this.onKeyDown_(e), false);
-                    this.target_.addEventListener('keyup', (e) => this.onKeyUp_(e), false);
-                }
-
-                onMouseMove_(e) {
-
-                    if (this.previous_ === null) {
-                        this.previous_ = {...this.current_};
-                    }
-
-                    this.current_.mouseXDelta = e.movementX
-                    this.current_.mouseYDelta = e.movementY
-                }
-
-                onKeyDown_(e) {
-                    this.keys_[e.keyCode] = true;
-                }
-
-                onKeyUp_(e) {
-                    this.keys_[e.keyCode] = false;
-                }
-
-                key(keyCode) {
-                    return !!this.keys_[keyCode];
-                }
-
-                update(_) {
-                    if (this.previous_ !== null) {
-                    this.current_.mouseXDelta = this.current_.mouseX - this.previous_.mouseX;
-                    this.current_.mouseYDelta = this.current_.mouseY - this.previous_.mouseY;
-
-                    this.previous_ = {...this.current_};
-                    }
-                }
-            };
-
-            class FirstPersonCamera {
-                constructor(camera) {
-                    this.camera_ = camera;
-                    this.input_ = new InputController();
-                    this.rotation_ = new THREE.Quaternion();
-                    this.translation_ = new THREE.Vector3(0, 2, 0);
-                    this.phi_ = 0;
-                    this.phiSpeed_ = 8;
-                    this.theta_ = 0;
-                    this.thetaSpeed_ = 5;
-                    this.playerSpeed = 7
-                    this.velocity_y = 0
-                    this.playerCanJump = true
-                    this.clock = new THREE.Clock()
-                    this.deltaTime = null
-                }
-
-                update(timeElapsedS) {
-                    this.updateRotation_(timeElapsedS);
-                    this.updateCamera_(timeElapsedS);
-                    this.updateTranslation_(timeElapsedS);
-                    this.input_.update(timeElapsedS);
-                }
-
-                updateCamera_(_) {
-                    this.camera_.quaternion.copy(this.rotation_);
-                    this.camera_.position.copy(this.translation_);
-
-                    let deltaTime = 0.0165
-                    // Snike : accroupi
-                    if(this.input_.key(20)){
-                        this.camera_.position.y = 1
-                    }
-                    // Space : jump !
-                    if (this.input_.key(32) && this.playerCanJump) {
-                        this.playerCanJump = false
-                        this.velocity_y = 100;
-                        this.camera_.position.y+=(this.velocity_y/2)*deltaTime;
-                    }
-                    this.camera_.position.y+=this.velocity_y*deltaTime;
-                    if(!this.playerCanJump){
-                        this.velocity_y-=9.8*30*deltaTime;
-                        if(this.camera_.position.y<=1.8){
-                            this.playerCanJump = true
-                            this.velocity_y=0;
-                            this.camera_.position.y= 1.8;
-                        }
-                    }
-                    const forward = new THREE.Vector3(0, 0, -1);
-                    forward.applyQuaternion(this.rotation_);
-
-                    const dir = forward.clone();
-
-                    forward.multiplyScalar(100);
-                    forward.add(this.translation_);
-
-                    let closest = forward;
-                    const result = new THREE.Vector3();
-                    const ray = new THREE.Ray(this.translation_, dir);
-
-                    this.camera_.lookAt(closest);
-                }
-
-                updateTranslation_(timeElapsedS) {
-                    const forwardVelocity = (this.input_.key(KEYS.z) ? 1 : 0) + (this.input_.key(KEYS.s) ? -1 : 0)
-                    const strafeVelocity = (this.input_.key(KEYS.q) ? 1 : 0) + (this.input_.key(KEYS.d) ? -1 : 0)
-
-                    const qx = new THREE.Quaternion();
-                    qx.setFromAxisAngle(new THREE.Vector3(0, 1, 0), this.phi_);
-
-                    const forward = new THREE.Vector3(0, 0, -1);
-                    forward.applyQuaternion(qx);
-                    forward.multiplyScalar(forwardVelocity * timeElapsedS * this.playerSpeed);
-
-                    const left = new THREE.Vector3(-1, 0, 0);
-                    left.applyQuaternion(qx);
-                    left.multiplyScalar(strafeVelocity * timeElapsedS * this.playerSpeed);
-
-                    this.translation_.add(forward);
-                    this.translation_.add(left);
-                }
-
-                updateRotation_(timeElapsedS) {
-                    const xh = this.input_.current_.mouseXDelta / window.innerWidth;
-                    const yh = this.input_.current_.mouseYDelta / window.innerHeight;
-
-                    this.phi_ += -xh * this.phiSpeed_;
-                    this.theta_ = clamp(this.theta_ + -yh * this.thetaSpeed_, -Math.PI / 2, Math.PI / 2);
-
-                    const qx = new THREE.Quaternion();
-                    qx.setFromAxisAngle(new THREE.Vector3(0, 1, 0), this.phi_);
-                    const qz = new THREE.Quaternion();
-                    qz.setFromAxisAngle(new THREE.Vector3(1, 0, 0), this.theta_);
-
-                    const q = new THREE.Quaternion();
-                    q.multiply(qx);
-                    q.multiply(qz);
-
-                    this.rotation_.copy(q);
-                }
-            }
 
         },
         data(){
@@ -1576,7 +1402,6 @@
                 remainBullets: 0,
                 remainLoaders: 0,
                 loader: 0,
-                isSound: [false],
             }
         },
     };

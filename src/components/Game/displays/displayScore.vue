@@ -3,9 +3,14 @@
         <p id="pChangeMoney" class="text-h6 p-score pr-1 py-0">{{ changeMoney }}</p>
         <p class="text-h6 p-score pr-6 py-0 font-weight-bold">{{ money }}</p>
     </div>   
-    <div v-else class="death-score mt-7 d-flex align-start justify-center">
-        <p class="p-death-score mx-6 px-2 py-0">Vous êtes mort</p>
-        <p class="p-death-score mx-6 px-2 py-0">Score : {{ score }}</p>
+    <div v-else class="death-score mt-7 d-flex align-center justify-start flex-column">
+        <div class="my-5">
+            <p class="p-death-score mx-6 px-2 py-0">Vous êtes mort</p>
+            <p class="p-death-score mx-6 px-2 py-0">Score : {{ score }}</p>
+        </div>
+        <div class="my-5">
+            <v-btn class="btn-restart mx-2" variant="outlined" @click="restart()">Recommencer la partie</v-btn>
+        </div>
     </div>  
 </template>
 
@@ -62,6 +67,9 @@ export default {
         }
     },
     methods:{
+        restart(){
+            eventBus.emit("restartGame")
+        },
     },
     computed: {
     }
@@ -80,6 +88,7 @@ export default {
     position: fixed;
     height: 90%;
     width: 100%;
+    cursor: default !important;
 }
 .p-score{
     color: white;
@@ -105,6 +114,14 @@ export default {
 }@keyframes moveDown {
     0% { transform: translateY(-20px); }
     100% { transform: translateY(0px); }
+}
+
+/* Btn restart */
+.btn-restart{
+    color: aliceblue;
+}
+.btn-restart:hover{
+    color: aliceblue;
 }
 
 </style>

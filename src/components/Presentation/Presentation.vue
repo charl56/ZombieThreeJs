@@ -12,9 +12,10 @@
             <p class="txt-h6 my-1 text-center">Espace pour sauter</p>
             <p class="txt-h6 my-1 text-center">VerMaj pour se baisser</p>
             <p class="txt-h6 my-1 text-center">Maj pour sprinter</p>
+            <p class="txt-h6 my-1 text-center">Entré pour activer les bruits</p>
         </div>
         <div class="mt-10">
-            <p class="txt-h6 my-1 text-center">Touche "Echap" pour mettre a pause pendant la partie</p>
+            <p class="txt-h6 my-1 text-center">Touche "P" pour mettre a pause pendant la partie</p>
             <p class="txt-h6 mx-1 text-center">Si lors d'une partie un ou plusieurs zombie(s) est/sont immortel(s), tuez les autres puis appuyez sur la touche O pour l'éliminer</p>
         </div>
         <div class="mt-10">

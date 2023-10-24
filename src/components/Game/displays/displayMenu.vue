@@ -3,17 +3,16 @@
         <v-row class="d-flex align-start justify-center">
             <p class="text-h5 mb-1">Jeu en pause</p>
         </v-row>
-        <v-row class="justify-center">
-            <div>
-                <v-switch v-model="sound" :value="sound" label="Sond du jeu" color="success" @change="changeValue()" :true-value="true" :false-value="false" inset hide-details></v-switch>
-            </div>
+        <v-row class="justify-center flex-column mt-5">
+            <p class="text-subtitle-1 my-0 text-center">ZQSD pour se déplacer</p>
+            <p class="text-subtitle-1 my-0 text-center">Espace pour sauter</p>
+            <p class="text-subtitle-1 my-0 text-center">VerMaj pour se baisser</p>
+            <p class="text-subtitle-1 my-0 text-center">Maj pour sprinter</p>
+            <p class="text-subtitle-1 my-0 text-center">Entré pour activer les bruits</p>
+            <p class="text-subtitle-1 my-1 text-center">Appuyez de nouveau sur 'P' pour revenir en jeu</p>
         </v-row>
-        <v-row class="justify-center mt-10">
-            <p class="txt-h6 my-1 text-center">Appuyez de nouveau sur 'Echap' pour revenir en jeu</p>
-            <p class="txt-h6 mx-1 text-center">Si lors d'une partie un ou plusieurs zombie(s) est/sont immortel(s), tuez les autres puis appuyez sur la touche O pour l'éliminer</p>
-        </v-row>
-        <v-row class="justify-center mt-10">
-            <v-btn class="btn-restart mx-2" variant="outlined" @click="restart()">Recommencer</v-btn>
+        <v-row class="justify-center mt-5">
+            <v-btn class="btn-restart mx-2" variant="outlined" @click="restart()">Recommencer la partie</v-btn>
         </v-row>
     </v-dialog> 
 </template>
@@ -39,9 +38,6 @@ export default {
         }
     },
     methods:{
-        changeValue(){
-            eventBus.emit("isSound",this.sound)
-        },
         restart(){
             this.gameStop = false
             eventBus.emit("restartGame")
