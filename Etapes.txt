@@ -1,3 +1,40 @@
-Stats kills
-    Séparer de l'argent pour bien afficher les stats a la fin
-Murs invisibles pour pas sortir de la map
+Importants : 
+    Murs invisibles pour pas sortir de la map
+    Coup de cut
+    zombie immortel
+    flingu devant
+    Multi !
+
+    
+
+
+Moins important : 
+    Rester sur clique = mitraille
+
+    
+    
+    Multiplayer : 
+        Server host : map, zombies with their deplacement, player position, 
+        Players : create web socket. Every player send their position, to the backend
+            In same time, backend send them positio of other player to the front
+            The front put skin on other players, with their coordonates
+        Zombies : 
+            Create zombie positions in backend ?
+            Deplamceent in backend ? They can choose between on of the players
+            When kill, other player see animation of turning
+        Create some maps on the server, and choose the map at the beginning
+            Name of the map, and number of users
+
+
+
+        Backend in nodejs, to execute threejs
+            Frontend load map, with their elements
+            Backend get user position, and put them in the render function
+                So the zombie spawn will move
+                    Create function, for them to choose the nearest player
+                Then, send with websocket zombies position to the front
+                The player(s) will see zombie go to them
+
+
+
+

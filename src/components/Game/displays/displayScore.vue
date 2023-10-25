@@ -6,7 +6,8 @@
     <div v-else class="death-score mt-7 d-flex align-center justify-start flex-column">
         <div class="my-5">
             <p class="p-death-score mx-6 px-2 py-0">Vous êtes mort</p>
-            <p class="p-death-score mx-6 px-2 py-0">Score : {{ score }}</p>
+            <p class="p-death-score mx-6 px-2 py-0" v-if="score <= 1">Zombie tué : {{ score }}</p>
+            <p class="p-death-score mx-6 px-2 py-0" v-else>Zombies tués : {{ score }}</p>
         </div>
         <div class="my-5">
             <v-btn class="btn-restart mx-2" variant="outlined" @click="restart()">Recommencer la partie</v-btn>

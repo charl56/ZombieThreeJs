@@ -216,6 +216,7 @@
             function setupGraphics(){
                 //create clock for timing
                 clock = new THREE.Clock();
+
                 // Init caméra
                 camera = new THREE.PerspectiveCamera(75,canvas.clientWidth / canvas.clientHeight,0.1,100);
                 // Position camera
@@ -235,7 +236,7 @@
                 scene.background = new THREE.Color( 0x000000 );
                 // POV, class js
                 fpsControls = new FirstPersonCamera(camera);
-
+                
                 // Hitbox pour les zones d'armes
                 hitboxPlayer = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
                 hitboxPlayer.setFromCenterAndSize(camera.position, new THREE.Vector3(0.8, 2, 0.8))
@@ -265,7 +266,7 @@
             // Ajout des élements à la scene, chargement graphique des éléments
             ////
             async function initScene(){
-                // Sol : THREEHS
+                // Sol : THREEJS
                 const floor = new THREE.Mesh(
                     new THREE.PlaneGeometry(100, 100),
                     new THREE.MeshBasicMaterial({color: 0x808080, wireframe: false})
@@ -396,15 +397,6 @@
                         console.error("Erreur lors du chargement de la physique d'un élement", error);
                     }
                 }
-
-                // // Image en 360 : stade
-                // const hdrTexture = new URL('../../assets/FondHdr/stadium.hdr', import.meta.url);
-                // const loader = new RGBELoader()
-                // // Set hdr on background
-                // loader.load(hdrTexture, function(texture){
-                //     texture.mapping = THREE.EquirectangularReflectionMapping
-                //     scene.background = texture;
-                // })
             }
             ////
             // Fonctions pour charger les élements 'obj' et 'mtl'
@@ -692,12 +684,13 @@
             // Mise en place des fonction d'évenement
             ////
             function setupEventHandlers(){
-                document.addEventListener('click', (e) => onClick(e), false)       // Tire
+                document.addEventListener('click', (e) => onClick(e), false)    // Tire
                 document.addEventListener('contextmenu', (e) => onContextMenu(e), false)    // Viseur
-                document.addEventListener('keyup', (e) => keyUp(e), false)  // Appuie d'une touche
+                document.addEventListener('keyup', (e) => keyUp(e), false)      // Appuie d'une touche
                 document.addEventListener('keydown', (e) => keyDown(e), false)  // Lachement d'une touche
-                document.addEventListener('wheel', (e) => wheel(e), false)  // Roulette inventaire
+                document.addEventListener('wheel', (e) => wheel(e), false)      // Roulette inventaire
             }
+
 
             // Roulette inventaire
             function wheel(e){
@@ -740,7 +733,6 @@
                             // ------ THREEJS SECTION
                             // Balle, en fonction de l'arme
                             let bullet = weapons[inventory[indexWeapon]].ammo.mesh.clone()
-
                             let bulletPos
 
                             // Position de départ de la balle, en fonction de la vue (visé ou non)
@@ -1103,7 +1095,7 @@
                                                 // A la mort : 100 points
                                                 money += 100
                                                 eventBus.emit("moneyChange", money)
-                                                score += 100
+                                                score += 1
                                                 eventBus.emit("scoreChange", score)
                                                 // On decremente le nombre de zombie restant
                                                 remainZombie = remainZombie - 1
@@ -1170,6 +1162,7 @@
                     renderer.render(deathScreen.scene, deathScreen.camera)
                     return
                 } else {
+                    console.log(parseInt(camera.position.x), parseInt(camera.position.z))
                     // Marche ralentie par la lave, sprint ou marche normal
                     if(player.speed == 4){
                         fpsControls.playerSpeed = 4
@@ -1387,9 +1380,6 @@
                 document.exitPointerLock();
                 eventBus.emit("playerDeath")
             }
-
-            ///////////////////////////////////////////////////////////
-            // Class controle POV
 
         },
         data(){
