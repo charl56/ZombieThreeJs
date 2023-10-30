@@ -1,10 +1,10 @@
 import * as THREE from 'three';
 
 const KEYS = {
-    'z': 90,
-    's': 83,
-    'q': 81,
-    'd': 68,
+    'z': 83,
+    's': 90,
+    'q': 68,
+    'd': 81,
 };
 
 function clamp(x, a, b) {
@@ -33,11 +33,10 @@ export class InputController {
     }
 
     onMouseMove_(e) {
-
         if (this.previous_ === null) {
             this.previous_ = {...this.current_};
         }
-
+        
         this.current_.mouseXDelta = e.movementX
         this.current_.mouseYDelta = e.movementY
     }
@@ -65,8 +64,9 @@ export class InputController {
 };
 
 export class FirstPersonCamera {
-    constructor(camera) {
+    constructor(camera, ball) {
         this.camera_ = camera;
+        this.ball_ = ball;
         this.input_ = new InputController();
         this.rotation_ = new THREE.Quaternion();
         this.translation_ = new THREE.Vector3(0, 2, 0);
@@ -89,27 +89,34 @@ export class FirstPersonCamera {
     }
 
     updateCamera_(_) {
-        this.camera_.quaternion.copy(this.rotation_);
-        this.camera_.position.copy(this.translation_);
+        // console.log(this.translation_)
+        // this.ball_.userData.physicsBody.threeObject.quaternion.copy(this.rotation_);
+        // this.ball_.userData.physicsBody.threeObject.position.copy(this.translation_)
+        // this.ball_.userData.physicsBody.setLinearVelocity(this.translation_)
 
+
+        this.ball_.quaternion.copy(this.rotation_);
+        this.ball_.position.copy(this.translation_);
+
+        
         let deltaTime = 0.0165
         // Snike : accroupi
         if(this.input_.key(20)){
-            this.camera_.position.y = 1.2
+            this.ball_.position.y = 1.2
         }
         // Space : jump !
         if (this.input_.key(32) && this.playerCanJump) {
             this.playerCanJump = false
             this.velocity_y = 100;
-            this.camera_.position.y+=(this.velocity_y/2)*deltaTime;
+            this.ball_.position.y+=(this.velocity_y/2)*deltaTime;
         }
-        this.camera_.position.y+=this.velocity_y*deltaTime;
+        this.ball_.position.y+=this.velocity_y*deltaTime;
         if(!this.playerCanJump){
             this.velocity_y-=9.8*30*deltaTime;
-            if(this.camera_.position.y<=1.8){
+            if(this.ball_.position.y<=1.8){
                 this.playerCanJump = true
                 this.velocity_y=0;
-                this.camera_.position.y= 1.8;
+                this.ball_.position.y= 1.8;
             }
         }
         const forward = new THREE.Vector3(0, 0, -1);
@@ -124,7 +131,7 @@ export class FirstPersonCamera {
         const result = new THREE.Vector3();
         const ray = new THREE.Ray(this.translation_, dir);
 
-        this.camera_.lookAt(closest);
+        this.ball_.lookAt(closest);
     }
 
     updateTranslation_(timeElapsedS) {
@@ -148,8 +155,7 @@ export class FirstPersonCamera {
 
     updateRotation_(timeElapsedS) {
         const xh = this.input_.current_.mouseXDelta / window.innerWidth;
-        const yh = this.input_.current_.mouseYDelta / window.innerHeight;
-
+        const yh = -(this.input_.current_.mouseYDelta / window.innerHeight);
         this.phi_ += -xh * this.phiSpeed_;
         this.theta_ = clamp(this.theta_ + -yh * this.thetaSpeed_, -Math.PI / 2, Math.PI / 2);
 

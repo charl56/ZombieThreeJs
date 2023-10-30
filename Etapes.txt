@@ -1,11 +1,19 @@
 Importants : 
     Murs invisibles pour pas sortir de la map
+    
     Coup de cut
+    
     zombie immortel
+    
     flingu devant
+        phi and theta in FPC
+
+    Louis manche chien
+
     Multi !
 
     
+No aiming, because block mouse for 360 vision
 
 
 Moins important : 
