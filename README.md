@@ -5,6 +5,10 @@ Make on VueJs to play on browser
 * ThreeJs for 3D env
 * AmmoJs for physics part
 
+## Thanks to 
+* https://github.com/simondevyoutube/Quick_FPS1
+
+
 ## Project Setup
 
 ```sh

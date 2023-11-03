@@ -1,6 +1,34 @@
+Urgent
+    Zombies
+        Rigid part, to don't accros walls
+        Move to player, with rigid part
+
+    Weapons
+        Fire bullet
+
+    Collision
+        Between bullets and zombies
+        Between bullets and walls
+        Between player and zombies
+
+    Manage number of zombies per round
+        Check on many stay, to get when 0
+        When 0, new round and add new zombies
+
+
+
+
+
+
+
+
+
+
+    Manches
+    Score/Argent
+
+
 Importants : 
-    Murs invisibles pour pas sortir de la map
-    
     Coup de cut
     
     zombie immortel

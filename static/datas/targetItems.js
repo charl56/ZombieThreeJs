@@ -12,7 +12,7 @@ let targetItems = {
             y: Math.PI / 2,
             z: 0,
         },
-        scale: 3,                    // Echelle de l'item 
+        scale: 5,                    // Echelle de l'item 
     },
 }
 

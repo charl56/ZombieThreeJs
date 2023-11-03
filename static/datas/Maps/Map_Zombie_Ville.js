@@ -14,10 +14,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: 1,
+            y: Math.PI/2,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 10,
+            y: 0.01,
+            z: 10,
+        },                    // Echelle de l'item 
         hitBoxPosition: {
             x: 6,
             y: 0.01,
@@ -43,11 +48,16 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
-        hitBoxPosition: {
-            x: 6,
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 10,
             y: 0.01,
-            z: 6,
+            z: 10,
+        }, 
+        hitBoxPosition: {
+            x: 10,
+            y: 0.01,
+            z: 10,
         },
         hitBox: {
             x: 0,
@@ -66,10 +76,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: 200,
+            y: Math.PI,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 10,
+            y: 0.01,
+            z: 10,
+        }, 
         hitBoxPosition: {
             x: 0,
             y: 0.01,
@@ -92,10 +107,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: -1,
+            y: -Math.PI/2,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 10,
+            y: 0.01,
+            z: 10,
+        }, 
         hitBoxPosition: {
             x: 0,
             y: 0.01,
@@ -122,7 +142,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 10,
+            y: 0.01,
+            z: 10,
+        }, 
         hitBoxPosition: {
             x: 12,
             y: 0.01,
@@ -148,7 +173,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 10,
+            y: 0.01,
+            z: 10,
+        }, 
         hitBoxPosition: {
             x: 18,
             y: 0.01,
@@ -174,7 +204,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 10,
+            y: 0.01,
+            z: 10,
+        }, 
         hitBoxPosition: {
             x: 24,
             y: 0.01,
@@ -200,7 +235,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 10,
+            y: 0.01,
+            z: 10,
+        }, 
         hitBoxPosition: {
             x: 30,
             y: 0.01,
@@ -226,7 +266,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 10,
+            y: 0.01,
+            z: 10,
+        }, 
         hitBoxPosition: {
             x: -6,
             y: 0.01,
@@ -252,7 +297,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 15,
+            y: 0.01,
+            z: 15,
+        }, 
         hitBoxPosition: {
             x: -12,
             y: 0.01,
@@ -278,7 +328,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 10,
+            y: 0.01,
+            z: 10,
+        }, 
         hitBoxPosition: {
             x: -18,
             y: 0.01,
@@ -304,7 +359,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 10,
+            y: 0.01,
+            z: 10,
+        }, 
         hitBoxPosition: {
             x: -24,
             y: 0.01,
@@ -330,7 +390,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 10,
+            y: 0.01,
+            z: 10,
+        }, 
         hitBoxPosition: {
             x: -30,
             y: 0.01,
@@ -353,10 +418,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: 1,
+            y: Math.PI/2,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 10,
+            y: 0.01,
+            z: 10,
+        }, 
         hitBoxPosition: {
             x: 3,
             y: 0.01,
@@ -379,10 +449,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: 1,
+            y: Math.PI/2,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 10,
+            y: 0.01,
+            z: 10,
+        }, 
         hitBoxPosition: {
             x: 3,
             y: 0.01,
@@ -405,10 +480,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: 1,
+            y: Math.PI/2,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 10,
+            y: 0.01,
+            z: 10,
+        }, 
         hitBoxPosition: {
             x: 3,
             y: 0.01,
@@ -431,10 +511,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: 1,
+            y: Math.PI/2,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 10,
+            y: 0.01,
+            z: 10,
+        }, 
         hitBoxPosition: {
             x: 3,
             y: 0.01,
@@ -457,10 +542,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: 1,
+            y: Math.PI/2,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 10,
+            y: 0.01,
+            z: 10,
+        }, 
         hitBoxPosition: {
             x: 3,
             y: 0.01,
@@ -483,10 +573,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: 1,
+            y: Math.PI/2,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 10,
+            y: 0.01,
+            z: 10,
+        }, 
         hitBoxPosition: {
             x: 3,
             y: 0.01,
@@ -509,10 +604,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: 1,
+            y: Math.PI/2,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 10,
+            y: 0.01,
+            z: 10,
+        }, 
         hitBoxPosition: {
             x: 3,
             y: 0.01,
@@ -535,10 +635,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: 1,
+            y: Math.PI/2,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 10,
+            y: 0.01,
+            z: 10,
+        }, 
         hitBoxPosition: {
             x: 3,
             y: 0.01,
@@ -561,10 +666,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: 1,
+            y: Math.PI/2,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 10,
+            y: 0.01,
+            z: 10,
+        }, 
         hitBoxPosition: {
             x: -6,
             y: 0.3,
@@ -587,10 +697,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: 1,
+            y: Math.PI/2,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 10,
+            y: 0.01,
+            z: 10,
+        }, 
         hitBoxPosition: {
             x: 24,
             y: 0.3,
@@ -613,10 +728,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: 1,
+            y: Math.PI/2,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 10,
+            y: 0.01,
+            z: 10,
+        }, 
         hitBoxPosition: {
             x: 30,
             y: 0.3,
@@ -626,6 +746,37 @@ let sceneItems = {
             x: 0,
             y: 0,
             z: 0
+        }
+    },
+    roadAsphalt_pavement4: {
+        obj: './static/Models/Retro_Urban/Models/roadAsphalt_pavement.obj',      // Item
+        mtl: './static/Models/Retro_Urban/Models/roadAsphalt_pavement.mtl',      // Item
+        mesh: null,                                         // Données de l'affichage de l'item
+        position: {                 // Position de l'item
+            x: -12,
+            y: 0.01,
+            z: -6,
+        },
+        rotation: {                 // Rotation de l'item
+            x: 0,
+            y: 0,
+            z: 0,
+        },
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 10,
+            y: 0.01,
+            z: 10,
+        }, 
+        hitBoxPosition: {
+            x: -32,
+            y: 0.01,
+            z: -6
+        },
+        hitBox: {
+            x: 6,
+            y: 0,
+            z: 6
         }
     },
     ////////
@@ -645,7 +796,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 10,
+            y: 0.01,
+            z: 10,
+        }, 
         hitBoxPosition: {
             x: -26,
             y: 0.01,
@@ -671,7 +827,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 10,
+            y: 0.01,
+            z: 10,
+        }, 
         hitBoxPosition: {
             x: -32,
             y: 0.01,
@@ -700,7 +861,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: -25,
             y: 0.01,
@@ -723,10 +889,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: 1,
+            y: Math.PI/2,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: 11,
             y: 0.01,
@@ -749,10 +920,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: 1,
+            y: Math.PI/2,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: 11,
             y: 0.01,
@@ -778,7 +954,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: 19,
             y: 0.01,
@@ -801,10 +982,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: 1,
+            y: Math.PI/2,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: 11,
             y: 0.01,
@@ -827,10 +1013,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: -1,
+            y: -Math.PI/2,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: -5,
             y: 0.01,
@@ -853,10 +1044,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: -1,
+            y: -Math.PI/2,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: -5,
             y: 0.01,
@@ -882,7 +1078,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: -21,
             y: 0.01,
@@ -908,7 +1109,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: -17,
             y: 0.01,
@@ -934,7 +1140,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: 27,
             y: 0.01,
@@ -957,10 +1168,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: 1,
+            y: Math.PI/2,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: 11,
             y: 0.01,
@@ -986,7 +1202,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: -13,
             y: 0.01,
@@ -1012,7 +1233,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: -9,
             y: 0.01,
@@ -1038,7 +1264,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: -21,
             y: 0.01,
@@ -1064,7 +1295,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: -21,
             y: 0.01,
@@ -1090,7 +1326,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: -17,
             y: 0.01,
@@ -1116,7 +1357,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: -4,
             y: 0.01,
@@ -1142,7 +1388,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: -4,
             y: 0.01,
@@ -1168,7 +1419,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: -4,
             y: 0.01,
@@ -1194,7 +1450,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: -4,
             y: 0.01,
@@ -1220,7 +1481,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: 11,
             y: 0.01,
@@ -1246,7 +1512,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: 11,
             y: 0.01,
@@ -1272,7 +1543,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: 15,
             y: 0.01,
@@ -1298,7 +1574,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: 19,
             y: 0.01,
@@ -1324,7 +1605,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: 23,
             y: 0.01,
@@ -1350,7 +1636,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: 19,
             y: 0.01,
@@ -1376,7 +1667,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: 15,
             y: 0.01,
@@ -1402,7 +1698,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: 23,
             y: 0.01,
@@ -1428,7 +1729,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: 27,
             y: 0.01,
@@ -1454,7 +1760,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: 31,
             y: 0.01,
@@ -1480,7 +1791,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: 11,
             y: 0.01,
@@ -1506,7 +1822,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: 11,
             y: 0.01,
@@ -1532,7 +1853,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: -5,
             y: 0.01,
@@ -1558,7 +1884,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: 11,
             y: 0.01,
@@ -1584,7 +1915,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: -5,
             y: 0.01,
@@ -1607,10 +1943,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: 180,
+            y: Math.PI,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 4.2,
+            y: 15,
+            z: 4.2,
+        },         
         hitBoxPosition: {
             x: -12,
             y: 0.01,
@@ -1633,10 +1974,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: -0.4,
+            y: -Math.PI/4,
             z: 0,
         },
-        scale: 7,                    // Echelle de l'item 
+        scale_threejs: 7,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        },
         hitBoxPosition: {
             x: -7,
             y: 0.01,
@@ -1665,7 +2011,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: 11,
             y: 0.01,
@@ -1677,8 +2028,6 @@ let sceneItems = {
             z: 2.2,
         }
     },
-
-
     ///////////
     // Escalier
     ///////////
@@ -1696,7 +2045,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 4,
+        }, 
         hitBoxPosition: {
             x: 11,
             y: 0.01,
@@ -1725,7 +2079,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 0.1,
+        }, 
         hitBoxPosition: {
             x: -25,
             y: 0.01,
@@ -1751,7 +2110,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 0.1,
+        }, 
         hitBoxPosition: {
             x: 7,
             y: 0.01,
@@ -1777,7 +2141,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 0.1,
+        }, 
         hitBoxPosition: {
             x: 3,
             y: 0.01,
@@ -1803,7 +2172,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 0.1,
+        }, 
         hitBoxPosition: {
             x: -1,
             y: 0.01,
@@ -1829,7 +2203,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 0.1,
+        }, 
         hitBoxPosition: {
             x: -25,
             y: 1.6,
@@ -1855,7 +2234,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 0.1,
+        }, 
         hitBoxPosition: {
             x: 7,
             y: 1.6,
@@ -1881,7 +2265,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 0.1,
+        }, 
         hitBoxPosition: {
             x: 3,
             y: 1.6,
@@ -1907,7 +2296,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 0.1,
+        }, 
         hitBoxPosition: {
             x: -1,
             y: 1.6,
@@ -1933,7 +2327,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 0.1,
+        }, 
         hitBoxPosition: {
             x: 23,
             y: 0.01,
@@ -1951,7 +2350,7 @@ let sceneItems = {
         mesh: null,                                         // Données de l'affichage de l'item
         position: {                 // Position de l'item
             x: 23,
-            y: 1.6,
+            y: 1.8,
             z: -3,
         },
         rotation: {                 // Rotation de l'item
@@ -1959,7 +2358,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 0.1,
+        }, 
         hitBoxPosition: {
             x: 23,
             y: 1.6,
@@ -1977,15 +2381,20 @@ let sceneItems = {
         mesh: null,                                         // Données de l'affichage de l'item
         position: {                 // Position de l'item
             x: 10,
-            y: 1.6,
-            z: -1.5,
+            y: 0.01,
+            z: -1,
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: 1,
+            y: Math.PI/2,
             z: 0,
         },
-        scale: 3,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 0.1,
+            y: 4,
+            z: 3.5,
+        },         
         hitBoxPosition: {
             x: 10,
             y: 0.01,
@@ -2003,7 +2412,7 @@ let sceneItems = {
         mesh: null,                                         // Données de l'affichage de l'item
         position: {                 // Position de l'item
             x: 0,
-            y: 1.6,
+            y: 0.01,
             z: -24,
         },
         rotation: {                 // Rotation de l'item
@@ -2011,10 +2420,15 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 0.1,
+        },         
         hitBoxPosition: {
             x: 0,
-            y: 1.6,
+            y: 1.8,
             z: -24,
         },
         hitBox: {
@@ -2037,7 +2451,12 @@ let sceneItems = {
             y: 0,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 0.1,
+        }, 
         hitBoxPosition: {
             x: 0,
             y: 0.01,
@@ -2060,10 +2479,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: 180,
+            y: Math.PI,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 5.5,
+            y: 15,
+            z: 0.1,
+        }, 
         hitBoxPosition: {
             x: -6,
             y: 0.01,
@@ -2086,10 +2510,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: 1,
+            y: Math.PI/2,
             z: 0,
         },
-        scale: 6,                    // Echelle de l'item 
+        scale_threejs: 6,
+        scale_physic: {              
+            x: 0.1,
+            y: 15,
+            z: 5.5,
+        }, 
         hitBoxPosition: {
             x: -3.2,
             y: 0.01,
@@ -2117,10 +2546,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: 0.2,
+            y: Math.PI/8,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 8,
+        }, 
         hitBoxPosition: {
             x: -30,
             y: 0.01,
@@ -2143,10 +2577,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: -0.08,
+            y: -Math.PI/12,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 8,
+        }, 
         hitBoxPosition: {
             x: 31,
             y: 0.01,
@@ -2169,10 +2608,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: 180,
+            y: Math.PI/12,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 8,
+        }, 
         hitBoxPosition: {
             x: 31,
             y: 0.01,
@@ -2195,10 +2639,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: -0.2,
+            y: -Math.PI/12,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 8,
+        }, 
         hitBoxPosition: {
             x: -31,
             y: 0.01,
@@ -2221,10 +2670,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: 1,
+            y: Math.PI/2,
             z: 0,
         },
-        scale: 3,                    // Echelle de l'item 
+        scale_threejs: 3,
+        scale_physic: {              
+            x: 4,
+            y: 15,
+            z: 2,
+        }, 
         hitBoxPosition: {
             x: 0.5,
             y: 0.01,
@@ -2247,10 +2701,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: -0.1,
+            y: -Math.PI/12,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 2.5,
+            y: 15,
+            z: 5,
+        }, 
         hitBoxPosition: {
             x: 15,
             y: 0.01,
@@ -2273,10 +2732,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: -1.2,
+            y: -Math.PI/2,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 6,
+            y: 15,
+            z: 3,
+        }, 
         hitBoxPosition: {
             x: 6,
             y: 0.01,
@@ -2299,10 +2763,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: Math.PI * 1.5,
+            y: 0,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 2.2,
+            y: 15,
+            z: 6,
+        }, 
         hitBoxPosition: {
             x: -29,
             y: 0.01,
@@ -2325,10 +2794,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: -2,
+            y: Math.PI,
             z: 0,
         },
-        scale: 4,                    // Echelle de l'item 
+        scale_threejs: 4,
+        scale_physic: {              
+            x: 2.2,
+            y: 4,
+            z: 6,
+        }, 
         hitBoxPosition: {
             x: -14,
             y: 0.01,
@@ -2351,10 +2825,15 @@ let sceneItems = {
         },
         rotation: {                 // Rotation de l'item
             x: 0,
-            y: 1.2,
+            y: Math.PI/2.3,
             z: 0,
         },
-        scale: 3,                    // Echelle de l'item 
+        scale_threejs: 3,
+        scale_physic: {              
+            x: 4,
+            y: 4,
+            z: 2,
+        }, 
         hitBoxPosition: {
             x: 0,
             y: 0.01,
@@ -2366,61 +2845,71 @@ let sceneItems = {
             z: 2.7,
         }
     },
-    //////////
-    // Chaises
-    //////////
-    chaise1: {
-        obj: './static/Models/Pol/Relec.obj',      // Item
-        mtl: './static/Models/Pol/Relec.mtl',      // Item
-        mesh: null,                                         // Données de l'affichage de l'item
-        position: {                 // Position de l'item
-            x: 0,
-            y: 0,
-            z: 0,
-        },
-        rotation: {                 // Rotation de l'item
-            x: 0,
-            y: 0,
-            z: 0,
-        },
-        scale: 0.025,                    // Echelle de l'item 
-        hitBoxPosition: {
-            x: 0,
-            y: 0,
-            z: 0,
-        },
-        hitBox: {
-            x: 1.3,
-            y: 1.1,
-            z: 2.7,
-        }
-    },
-    chaise2: {
-        obj: './static/Models/Pol/CHAISECAERTON.obj',      // Item
-        mtl: './static/Models/Pol/CHAISECAERTON.mtl',      // Item
-        mesh: null,                                         // Données de l'affichage de l'item
-        position: {                 // Position de l'item
-            x: 0,
-            y: 0,
-            z: 5,
-        },
-        rotation: {                 // Rotation de l'item
-            x: 0,
-            y: 0,
-            z: 0,
-        },
-        scale: 0.025,                    // Echelle de l'item 
-        hitBoxPosition: {
-            x: 0,
-            y: 0,
-            z: 5,
-        },
-        hitBox: {
-            x: 1.3,
-            y: 1.1,
-            z: 2.7,
-        }
-    }
+    // //////////
+    // // Chaises
+    // //////////
+    // chaise1: {
+    //     obj: './static/Models/Pol/Relec.obj',      // Item
+    //     mtl: './static/Models/Pol/Relec.mtl',      // Item
+    //     mesh: null,                                         // Données de l'affichage de l'item
+    //     position: {                 // Position de l'item
+    //         x: 0,
+    //         y: 0,
+    //         z: 0,
+    //     },
+    //     rotation: {                 // Rotation de l'item
+    //         x: 0,
+    //         y: 0,
+    //         z: 0,
+    //     },
+    //     scale_threejs: 0.025,
+    //     scale_physic: {              
+    //         x: 1,
+    //         y: 1,
+    //         z: 1,
+    //     }, 
+    //     hitBoxPosition: {
+    //         x: 0,
+    //         y: 0,
+    //         z: 0,
+    //     },
+    //     hitBox: {
+    //         x: 1.3,
+    //         y: 1.1,
+    //         z: 2.7,
+    //     }
+    // },
+    // chaise2: {
+    //     obj: './static/Models/Pol/CHAISECAERTON.obj',      // Item
+    //     mtl: './static/Models/Pol/CHAISECAERTON.mtl',      // Item
+    //     mesh: null,                                         // Données de l'affichage de l'item
+    //     position: {                 // Position de l'item
+    //         x: 0,
+    //         y: 0,
+    //         z: 5,
+    //     },
+    //     rotation: {                 // Rotation de l'item
+    //         x: 0,
+    //         y: 0,
+    //         z: 0,
+    //     },
+    //     scale_threejs: 0.025,
+    //     scale_physic: {              
+    //         x: 1,
+    //         y: 1,
+    //         z: 1,
+    //     }, 
+    //     hitBoxPosition: {
+    //         x: 0,
+    //         y: 0,
+    //         z: 5,
+    //     },
+    //     hitBox: {
+    //         x: 1.3,
+    //         y: 1.1,
+    //         z: 2.7,
+    //     }
+    // }
 }
 
 let spawnsCoord = {

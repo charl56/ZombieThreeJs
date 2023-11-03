@@ -149,6 +149,17 @@ export class FirstPersonCamera {
         left.applyQuaternion(qx);
         left.multiplyScalar(strafeVelocity * timeElapsedS * this.playerSpeed);
 
+        const walk = forward.clone().add(left);
+
+        // this.tmpVec3_.setValue(walk.x, walk.y, walk.z);
+        // this.controller_.setWalkDirection(this.tmpVec3_);
+  
+        const t = this.Parent.Attributes.Physics.CharacterController.body_.getWorldTransform();
+        const pos = t.getOrigin();
+        const pos3 = new THREE.Vector3(pos.x(), pos.y(), pos.z());
+  
+        this.translation_.lerp(pos3, 0.75);
+
         this.translation_.add(forward);
         this.translation_.add(left);
     }
