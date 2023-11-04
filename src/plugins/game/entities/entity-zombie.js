@@ -1,294 +1,340 @@
 import * as THREE from 'three';
 import { entity } from './entity';
+import {finite_state_machine} from '../map/finite-state-machine.js';
+import {player_state} from '../map/player_control/player-state.js';
+
 
 export const entity_zombie = (() => {
 
-const _M = new THREE.Matrix4();
-const _R = new THREE.Quaternion();
-
-  // Class for 1 zombie
-  class Zombie extends entity.Component {
+  const _M = new THREE.Matrix4();
+  const _R = new THREE.Quaternion();
     
-    constructor(params, acutalSpawn, zombieGltf) {   
-      super();    // Because extends entity.Component
-
-      this.params_ = params;
-      this.zombieGltf_ = zombieGltf;
-      this.name_ = null;
-      this.id_ = null;
-      this.display_ = {};
-      this.physic_ = null;
-      this.components_ = {};
-      this.attributes_ = {};
-      // Animations
-      this.mixer_ = null;
-      this.animations_ = [];
-      this.actualAnimation_ = null
-
-      this._position = new THREE.Vector3();
-      this._position.copy(acutalSpawn);
-      this._rotation = new THREE.Quaternion();
-      this._translation = new THREE.Vector3(0, 2, 0);
-      this.handlers_ = {};
-      this.parent_ = null;
-      this.dead_ = true;
+  class TargetFSM extends finite_state_machine.FiniteStateMachine {
+    constructor(proxy) {
+      super();
+      this._proxy = proxy;
+      this.Init_();
     }
 
-    async InitEntity(){
-      // Set zombie spawn
-      let scale = {x: 1, y: 1, z: 1};
-      // Get gltf file
+    Init_() {
+      this._AddState('idle', player_state.IdleState);
+      this._AddState('run', player_state.RunState);
+      this._AddState('death', player_state.DeathState);
+      this._AddState('shoot', player_state.AttackState);
+    }
+  };
+
+  class TargetCharacterControllerProxy {
+    constructor(animations) {
+      this.animations_ = animations;
+    }
+
+    get animations() {
+      return this.animations_;
+    }
+  };
+
+  class TargetCharacterController extends entity.Component {
+    constructor(params, zombieGltf) {
+      super();
+      this.params_ = params;
+      this.zombieGltf_ = zombieGltf
+    }
+
+    InitEntity() {
+      this.Init_();
+    }
+
+    Init_() {
+      this.decceleration_ = new THREE.Vector3(-0.0005, -0.0001, -5.0);
+      this.acceleration_ = new THREE.Vector3(1, 0.125, 100.0);
+      this.velocity_ = new THREE.Vector3(0, 0, 0);
+      this.group_ = new THREE.Group();
+
+      this.params_.scene.add(this.group_);
+      this.animations_ = {};
+  
+      this.Parent.Attributes.Render = {
+        group: this.group_,
+      };
+      this.Parent.Attributes.NPC = true;
+      this.LoadModels_();
+    }
+
+    InitComponent() {
+      this.RegisterHandler_('health.death', (m) => { this.OnDeath_(m); });
+      this.RegisterHandler_(
+          'update.position', (m) => { this.OnUpdatePosition_(m); });
+      this.RegisterHandler_(
+          'update.rotation', (m) => { this.OnUpdateRotation_(m); });
+    }
+
+    OnUpdatePosition_(msg) {
+      this.group_.position.copy(msg.value);
+    }
+
+    OnUpdateRotation_(msg) {
+      this.group_.quaternion.copy(msg.value);
+    }
+
+    OnDeath_(msg) {
+      this.stateMachine_.SetState('death');
+    }
+
+    async LoadModels_() {
+
       const loader = this.FindEntity('loader').GetComponent('LoadController');
       const gltf = await loader.loadGLTF(this.zombieGltf_.gltf);
-      this.animations_ = gltf.animations
+      // this.animations_ = gltf.animations
       // Equivalent mesh
-      const zombie = gltf.scene
-      // Ombre de l'objet
-      zombie.castShadow = true;
-      zombie.receiveShadow = true
-      // Position
-      zombie.position.copy(this._position)
-      zombie.scale.set(scale.x, scale.y, scale.z)
-      // Ajout d'un tag pour différencier
-      zombie.userData.tag = "target-zombie"
-      // Ajout à la scene
-      this.params_.scene.add(zombie)
+      this.target_ = gltf.scene
 
-      this.components_["zombie"] = zombie;
+      this.group_.add(this.target_);
+      this.target_.scale.setScalar(1);
 
-      this.mixer_ = this.SetActualAnimation("Jump")      
-      this.dead_ = false
-    }
+      this.target_.position.set(0,-2,0);
+      this.target_.rotateY(Math.PI);
+      // Shadows
+      this.target_.traverse(c => {
+        c.castShadow = true;
+        c.receiveShadow = true;
+      });
 
+      this.mixer_ = new THREE.AnimationMixer(this.target_);
 
-    Update(timeElapsed){
-      if(this.dead_) {
-        return
-      }
-   
-      console.log(this.Parent)
-      // Updates functions
-      this.updateRotation_(timeElapsed)
-      this.updateTranslation_(timeElapsed)
-      this.updateAnimation_(timeElapsed)
-
-      // Set value updated
-      this.components_['zombie'].quaternion.copy(this._rotation)
-      this.components_['zombie'].position.copy(this._position)
-      
-
-    }
-
-    updateRotation_(timeElapsed){
-      // Rotation zombie
-      const toPlayer = this.FindPlayer_()
-      if(toPlayer != undefined){
-        const dirToPlayer = toPlayer.clone().normalize();
-
-        _M.lookAt(
-          dirToPlayer,
-          new THREE.Vector3(0, 0, 0),
-          new THREE.Vector3(0, 1, 0));
-        _R.setFromRotationMatrix(_M);
-        
-        this._rotation.copy(_R)
-      }
-
-
-      // console.log(this)
-      // zombie.physic_.SetQuaternion(_R);
-      
-      // zombie.display_.quaternion.copy(zombie.physic_._rotation)
-    }
-    updateTranslation_(timeElapsed){
-      const stateMachine = {
-        "closeToPlayer": () => {
-          return new THREE.Vector3(Math.random()*2-1, Math.random()*2-1, Math.random()*2-1)
-        },
-      
-        "farFromPlayer": () => {
-          return new THREE.Vector3(0,0,0)  
-        },
-      
-        "defaultState": () => {
-          const forwardVelocity = 1;
-          const strafeVelocity = 0;
-    
-          const forward = new THREE.Vector3(0, 0, -1);
-          forward.applyQuaternion(_R);
-          forward.multiplyScalar(forwardVelocity * timeElapsed * 2);
-      
-          const left = new THREE.Vector3(-1, 0, 0);
-          left.applyQuaternion(_R);
-          left.multiplyScalar(strafeVelocity * timeElapsed * 2);
-          return forward.clone().add(left);
-        },
-      };
-      // Don't move if player not on map
-      const player = this.FindEntity('player');
-      if (player === undefined) return; // Sortie anticipée si player est undefined
-
-      let walk = new THREE.Vector3(0,0,0)  
-    
-      // If far, zomb doesn't move
-      const toPlayer = this.FindPlayer_()
-      if (toPlayer.length() > 15) {
-        walk = stateMachine["farFromPlayer"]()
-      }
-      // else if(toPlayer.length() < 1){
-      //   walk = stateMachine["closeToPlayer"]()
-      // }
-      else {
-        walk = stateMachine["defaultState"]()
-      }
-
-      this.Parent.Attributes.Physics.CharacterController.setWalkDirection(walk);
-      const t = this.Parent.Attributes.Physics.CharacterController.body_.getWorldTransform();
-      const pos = t.getOrigin();
-      const pos3 = new THREE.Vector3(-pos.x(), 0, -pos.z());
-      
-      this._translation.lerp(pos3, 0.25);
-
-      this.Parent._position.copy(this._translation)
-      this._position.copy(this.Parent._position)
-
- 
-    }
-
-    updateAnimation_(timeElapsed){
-      const stateMachine = {
-        "closeToPlayer": () => {
-          if (this.actualAnimation_ == 'SwordSlash' || this.actualAnimation_ == 'Punch') {
-            return;
+      const _FindAnim = (animName) => {
+        for (let i = 0; i < gltf.animations.length; i++) {
+          if (gltf.animations[i].name.includes(animName)) {
+            const clip = gltf.animations[i];
+            const action = this.mixer_.clipAction(clip);
+            return {
+              clip: clip,
+              action: action
+            }
           }
-      
-          if (Math.random() < 0.5 && this.actualAnimation_ != 'SwordSlash') {
-            this.mixer_ = this.SetActualAnimation('SwordSlash');
-          } else if (this.actualAnimation_ != 'Punch') {
-            this.mixer_ = this.SetActualAnimation('Punch');
-          }
-        },
-      
-        "farFromPlayer": () => {
-          if (this.actualAnimation_ != 'SitDown') {
-            this.mixer_ = this.SetActualAnimation('SitDown');
-          }
-        },
-      
-        "defaultState": () => {
-          if (this.actualAnimation_ != 'Walk') {
-            this.mixer_ = this.SetActualAnimation('Walk');
-          }
-        },
+        }
+        return null;
       };
 
-      const toPlayer = this.FindPlayer_()
-      if(toPlayer != undefined){
-        if (toPlayer.length() < 3) {
-          stateMachine["closeToPlayer"]();
-        } else if (toPlayer.length() > 15) {
-          stateMachine["farFromPlayer"]();
-        } else {
-          stateMachine["defaultState"]();
-        }  
+      this.animations_['idle'] = _FindAnim('Idle');
+      this.animations_['walk'] = _FindAnim('Walk');
+      this.animations_['run'] = _FindAnim('Run');
+      this.animations_['death'] = _FindAnim('Death');
+      this.animations_['attack'] = _FindAnim('Punch');
+      this.animations_['shoot'] = _FindAnim('Shoot');
+      // this.target_.visible = true;
+
+      this.stateMachine_ = new TargetFSM(
+          new TargetCharacterControllerProxy(this.animations_));
+
+      if (this.queuedState_) {
+        this.stateMachine_.SetState(this.queuedState_)
+        this.queuedState_ = null;
+      } else {
+        this.stateMachine_.SetState('idle');
       }
-      this.mixer_ != null ? this.mixer_.update(timeElapsed/2) : false
+
+      // this.Broadcast({
+      //     topic: 'load.character',
+      //     model: this.group_,
+      //     bones: this.bones_,
+      // });
+      // this.Parent.SetPosition(this.Parent.Position);
     }
 
-
-    
     FindPlayer_() {
       const player = this.FindEntity('player');
-      if (player === undefined) return; // Sortie anticipée si player est undefined
-      
-      const dir = player._position.clone();
-      dir.sub(this._position);
-      dir.y = 0;  
+      if(player === undefined) return;
+      const dir = player.Position.clone();
+      dir.sub(this.Parent.Position);
+      dir.y = 0;
 
       return dir;
     }
-    AddComponent(c) {
-      c.SetParent(this);
-      
-      if (!this.components_[c.constructor.name]) {
-        this.components_[c.constructor.name] = c;
-      }
-      
-      c.InitEntity();
-    }
-    SetActualAnimation(name){
-      this.actualAnimation_ = name
-      let mixer = new THREE.AnimationMixer(this.components_["zombie"])    // Animation on this zombie
-      const clip = THREE.AnimationClip.findByName(this.animations_, name) // Choose animation 'name' in animations_ list
-      let action = (mixer.clipAction(clip))
-      action.play()
-      return mixer
 
-    }
-    Destroy() {
-      for (let k in this.display_) {
-        this.display_[k].Destroy();
+    UpdateAI_(timeElapsedS) {
+      const toPlayer = this.FindPlayer_();
+      if(toPlayer === undefined) return;
+      const dirToPlayer = toPlayer.clone().normalize();
+
+      if (toPlayer.length() == 0 || toPlayer.length() > 50) {
+        this.stateMachine_.SetState('idle');
+        this.Parent.Attributes.Physics.CharacterController.setWalkDirection(new THREE.Vector3(0, 0, 0));
+        return;
       }
-      this.display_ = null;
-      this.parent_ = null;
-      this.handlers_ = null;
-    }
-    SetName(n) {
-      this.name_ = n;
-    }
-    SetId(n) {
-      this.id_ = n;
-    }
-    SetParent(p) {
-      this.parent_ = p;
-    }
-    SetAnimations(m){
-      this.animations_ = m
+
+      _M.lookAt(
+          new THREE.Vector3(0, 0, 0),
+          dirToPlayer,
+          new THREE.Vector3(0, 1, 0));
+      _R.setFromRotationMatrix(_M);
+
+      this.Parent.SetQuaternion(_R);
+
+        if (toPlayer.length() < 3) {
+          this.stateMachine_.SetState('shoot');
+          this.Parent.Attributes.Physics.CharacterController.setWalkDirection(new THREE.Vector3(0, 0, 0));
+          return;
+        }
+
+      const forwardVelocity = 1;
+      const strafeVelocity = 0;
+
+      const forward = new THREE.Vector3(0, 0, -1);
+      forward.applyQuaternion(_R);
+      forward.multiplyScalar(forwardVelocity * timeElapsedS * 2);
+  
+      const left = new THREE.Vector3(-1, 0, 0);
+      left.applyQuaternion(_R);
+      left.multiplyScalar(strafeVelocity * timeElapsedS * 2);
+
+      const walk = forward.clone().add(left);
+      this.Parent.Attributes.Physics.CharacterController.setWalkDirection(walk);
+      this.stateMachine_.SetState('run');
     }
 
+    Update(timeInSeconds) {
+      if (!this.stateMachine_) {
+        return;
+      }
+      const input = this.GetComponent('BasicCharacterControllerInput');
+      this.stateMachine_.Update(timeInSeconds, input);
+    
+      if (this.mixer_) {
+        this.mixer_.update(timeInSeconds);
+      }
+
+
+      // HARDCODED
+      if (this.stateMachine_._currentState._action) {
+        this.Broadcast({
+          topic: 'player.action',
+          action: this.stateMachine_._currentState.Name,
+          time: this.stateMachine_._currentState._action.time,
+        });
+      }
+
+      this.UpdateAI_(timeInSeconds);
+
+      // // VIDEO HACK
+      // switch (this.stateMachine_.State) {
+      //   case 'idle': {
+      //     this.UpdateAI_(timeInSeconds);
+      //     break;
+      //   }
+      //   case 'run': {
+      //     this.UpdateAI_(timeInSeconds);
+      //     break;
+      //   }
+      //   case 'shoot': {
+      //     break;
+      //   }
+      //   case 'death': {
+      //     this.Parent.Attributes.Physics.CharacterController.setWalkDirection(new THREE.Vector3(0, 0, 0));
+      //     break;
+      //   }
+      // }
+
+      // this.Parent.Attributes.Physics.CharacterController.setWalkDirection(walk);
+      // this.body_.motionState_.getWorldTransform(this.body_.transform_);
+      const t = this.Parent.Attributes.Physics.CharacterController.body_.getWorldTransform();
+      const pos = t.getOrigin();
+      const pos3 = new THREE.Vector3(pos.x(), pos.y(), pos.z());
+
+      this.Parent.SetPosition(pos3);
+
+      // // HARDCODED
+      // this.Broadcast({
+      //     topic: 'player.action',
+      //     action: this.stateMachine_._currentState.Name,
+      // });
+
+      // const currentState = this.stateMachine_._currentState;
+      // if (currentState.Name != 'walk' &&
+      //     currentState.Name != 'run' &&
+      //     currentState.Name != 'idle') {
+      //   return;
+      // }
+    
+      // const velocity = this.velocity_;
+      // const frameDecceleration = new THREE.Vector3(
+      //     velocity.x * this.decceleration_.x,
+      //     velocity.y * this.decceleration_.y,
+      //     velocity.z * this.decceleration_.z
+      // );
+      // frameDecceleration.multiplyScalar(timeInSeconds);
+      // frameDecceleration.z = Math.sign(frameDecceleration.z) * Math.min(
+      //     Math.abs(frameDecceleration.z), Math.abs(velocity.z));
+  
+      // velocity.add(frameDecceleration);
+  
+      // const controlObject = this.group_;
+      // const _Q = new THREE.Quaternion();
+      // const _A = new THREE.Vector3();
+      // const _R = controlObject.quaternion.clone();
+  
+      // const acc = this.acceleration_.clone();
+      // if (input._keys.shift) {
+      //   acc.multiplyScalar(2.0);
+      // }
+  
+      // if (input._keys.forward) {
+      //   velocity.z += acc.z * timeInSeconds;
+      // }
+      // if (input._keys.backward) {
+      //   velocity.z -= acc.z * timeInSeconds;
+      // }
+      // if (input._keys.left) {
+      //   _A.set(0, 1, 0);
+      //   _Q.setFromAxisAngle(_A, 4.0 * Math.PI * timeInSeconds * this.acceleration_.y);
+      //   _R.multiply(_Q);
+      // }
+      // if (input._keys.right) {
+      //   _A.set(0, 1, 0);
+      //   _Q.setFromAxisAngle(_A, 4.0 * -Math.PI * timeInSeconds * this.acceleration_.y);
+      //   _R.multiply(_Q);
+      // }
+  
+      // controlObject.quaternion.copy(_R);
+  
+      // const oldPosition = new THREE.Vector3();
+      // oldPosition.copy(controlObject.position);
+  
+      // const forward = new THREE.Vector3(0, 0, 1);
+      // forward.applyQuaternion(controlObject.quaternion);
+      // forward.normalize();
+  
+      // const sideways = new THREE.Vector3(1, 0, 0);
+      // sideways.applyQuaternion(controlObject.quaternion);
+      // sideways.normalize();
+  
+      // sideways.multiplyScalar(velocity.x * timeInSeconds);
+      // forward.multiplyScalar(velocity.z * timeInSeconds);
+  
+      // const pos = controlObject.position.clone();
+      // pos.add(forward);
+      // pos.add(sideways);
+
+      // const collisions = this._FindIntersections(pos, oldPosition);
+      // if (collisions.length > 0) {
+      //   return;
+      // }
+
+      // const terrain = this.FindEntity('terrain').GetComponent('TerrainChunkManager');
+      // pos.y = terrain.GetHeight(pos)[0];
+
+      // controlObject.position.copy(pos);
+  
+      // this.Parent.SetPosition(controlObject.position);
+      // this.Parent.SetQuaternion(controlObject.quaternion);
+    }
+  };
+    
+  return {
+      TargetFSM: TargetFSM,
+      TargetCharacterController: TargetCharacterController,
   };
 
- // Class for all zombies
- class ZombieManager {
-  constructor() {
-    this.ids_ = 0;
-    this.entitiesMap_ = {};
-    this.entities_ = [];
-  }
-
-  Destroy() {
-      this.entities_ = []
-  }
-
-  AddToList(e, n){
-    
-    this.ids_ += 1;
-    
-    this.entitiesMap_[n] = e;
-    this.entities_.push(e);
-
-    e.SetParent(this);
-    e.SetName(n);
-    e.SetId(this.ids_);
-    e.InitEntity();
-  }
-
-  GetList(){
-    return this.entities_
-  }
-
-  InitComponent() {}
-  
-  InitEntity() {}
-
-};
-
-
-
-  return {
-      Zombie: Zombie,
-      ZombieManager: ZombieManager,
-    };
 
 })();
 

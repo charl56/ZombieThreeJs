@@ -96,6 +96,13 @@ export const map_builder = (() => {
       }
 
       this.spawned_ = true;
+      
+      // Principal floor
+      const e = new entity.Entity();
+      e.AddComponent(new basic_rigid_body.BasicRigidBody({box: new THREE.Vector3(100, 0.1, 100)}));
+      this.Manager.Add(e);
+      e.SetPosition(new THREE.Vector3(0,0,0));
+      e.SetActive(false);
 
       this.BuildMap_();
     }

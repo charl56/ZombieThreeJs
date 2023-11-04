@@ -52,6 +52,7 @@ export const first_person_camera = (() => {
     Update(timeElapsedS) {
       this.updateRotation_(timeElapsedS);     // Camera rotation
       this.updateCamera_(timeElapsedS);       // Update camera datas 
+      this.updateHeadBob_(timeElapsedS);      // Head
       this.updateTranslation_(timeElapsedS);  // Camera moving
       this.updatePower_(timeElapsedS);        // Speed 
 
@@ -110,7 +111,22 @@ export const first_person_camera = (() => {
       }
     }
 
- 
+    updateHeadBob_(timeElapsedS) {
+      if (this.headBobActive_) {
+        const wavelength = Math.PI;
+        const nextStep = 1 + Math.floor(((this.headBobTimer_ + 0.000001) * this.headBobSpeed_) / wavelength);
+        const nextStepTime = nextStep * wavelength / this.headBobSpeed_;
+        this.headBobTimer_ = Math.min(this.headBobTimer_ + timeElapsedS, nextStepTime);
+  
+        if (this.headBobTimer_ == nextStepTime) {
+          this.headBobActive_ = false;
+          this.Broadcast({
+            topic: 'fps.step',
+            step: nextStep,
+          });
+        }
+      }
+    }
   
     updateRotation_(timeElapsedS) {
       const input = this.GetComponent('PlayerInput');

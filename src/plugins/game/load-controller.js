@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import  {FBXLoader} from 'three/examples/jsm/loaders/FBXLoader.js'
+import {FBXLoader} from 'three/examples/jsm/loaders/FBXLoader.js'
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';      // Pour les objets
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';      // //

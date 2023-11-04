@@ -104,6 +104,10 @@ export const player_input = (() => {
       return !!this.keys_[keyCode];
     }
 
+    mouseLeftReleased(checkPrevious=true) {
+      return (!this.current_.leftButton && this.previous_.leftButton);
+    }
+
     isReady() {
       return this.previous_ !== null;
     }

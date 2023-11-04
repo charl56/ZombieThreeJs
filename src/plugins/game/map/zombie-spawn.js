@@ -38,6 +38,7 @@ export const zombies_spawn = (() => {
         const zombieGltf = targetItems["zombieMale"]
         // Set zombie, depend of round
         let zombieNumber_ = (this.round_ * 1.41) + 2.6
+        // let zombieNumber_ = 1
         // Get zombies
         this.zombieManager_ = []
         // For number of zombie per round
@@ -47,17 +48,16 @@ export const zombies_spawn = (() => {
                 let keyLength = Object.keys(spawnsCoord).length
                 let keySpawn = parseInt(Math.random() * keyLength) + 1
                 let acutalSpawn = spawnsCoord[keySpawn] 
-                // 
+                
                 const zombie = new entity.Entity();
-                zombie.SetPosition(new THREE.Vector3(acutalSpawn.x, acutalSpawn.y, acutalSpawn.z));        // Position hitbox zombie
-
-                zombie.AddComponent(new entity_zombie.Zombie(this.params_, acutalSpawn, zombieGltf));
+                zombie.AddComponent(new entity_zombie.TargetCharacterController(this.params_, zombieGltf));
                 zombie.AddComponent(new kinematic_character_controller.KinematicCharacterController(this.params_));
-                zombie.AddComponent(new basic_rigid_body.CharacterRigidBody(this.params_));                
                 
                 this.Manager.Add(zombie, 'zombie_'+i);
+                zombie.SetPosition(new THREE.Vector3(acutalSpawn.x, acutalSpawn.y, acutalSpawn.z));        // Position hitbox zombie
+                zombie.SetActive(true)
+                // List
                 this.zombieManager_.push(zombie);    // List of zombies
-                
               } catch (error) {
                 console.error("Erreur lors du chargement de la physique d'un élement", error);
             }

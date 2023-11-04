@@ -69,6 +69,7 @@ export class QuickFPS1 {
     spawner.AddComponent(new map_builder.Build(basicParams));
     // Zombie part (spawn, round...)
     spawner.AddComponent(new zombies_spawn.ZombiesSpawn(basicParams));
+ 
     
     // Wait to spawn player
     const intervalLoop_ = setInterval(() => {
@@ -79,6 +80,7 @@ export class QuickFPS1 {
   // Spawn player when map ready
   spawnFunction(spawner, basicParams, intervalLoop_) {
     if(basicParams.scene.userData.mapReady) {
+      // Player
       spawner.AddComponent(new player.SetUp(basicParams));
       spawner.GetComponent('SetUp').Spawn();
       // Stop interval
