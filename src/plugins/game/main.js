@@ -10,7 +10,9 @@ import {map_builder} from './map/zombie-map-builder.js'
 // Zombies spawn               
 import {zombies_spawn} from './map/zombie-spawn.js'
 // Setup player input, FPC, kinematic controller
-import {player} from './map/player.js';               
+import {player} from './map/player.js';          
+
+import {blaster} from './fx/blaster.js';
 
 
 
@@ -50,7 +52,14 @@ export class QuickFPS1 {
     this.scene_ = threejs.GetComponent('ThreeJSController').scene_;
     this.camera_ = threejs.GetComponent('ThreeJSController').camera_;
     this.threejs_ = threejs.GetComponent('ThreeJSController');
-
+    // FX
+    const fx = new entity.Entity();
+    fx.AddComponent(new blaster.BlasterSystem({
+        scene: this.scene_,
+        camera: this.camera_,
+        texture: './static/Texture/fx/blaster.jpg',
+    }));
+    this.entityManager_.Add(fx, 'fx');
     // Create entity for loading function
     const l = new entity.Entity();
     l.AddComponent(new load_controller.LoadController());
@@ -111,6 +120,8 @@ export class QuickFPS1 {
     // Update AmmoJs part & ThreeJs part 
     this.ammojs_.StepSimulation(timeElapsedS);
     this.threejs_.Render(timeElapsedS);
+
+    // console.log(this.entityManager_.entitiesMap_)
   }
 }
 

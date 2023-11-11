@@ -34,7 +34,7 @@ export const player_state = (() => {
       if (prevState) {
         const prevAction = this._parent._proxy.animations[prevState.Name].action;
   
-        this._action.crossFadeFrom(prevAction, 0.2, true);
+        this._action.crossFadeFrom(prevAction, 1, true);
         this._action.play();
       } else {
         this._action.play();
@@ -101,7 +101,7 @@ export const player_state = (() => {
     }
   };
 
-  class AttackState extends State {
+  class AttackState_1 extends State {
     constructor(parent) {
       super(parent);
   
@@ -113,15 +113,69 @@ export const player_state = (() => {
     }
   
     get Name() {
-      return 'attack';
+      return 'attack_1';
     }
   
     Enter(prevState) {
-      this._action = this._parent._proxy.animations['attack'].action;
+
+      this._action = this._parent._proxy.animations['attack_1'].action;
       const mixer = this._action.getMixer();
       mixer.addEventListener('finished', this._FinishedCallback);
+
+      if (prevState.Name != 'attack_1' && prevState.Name != 'attack_2') {
+        const prevAction = this._parent._proxy.animations[prevState.Name].action;
   
-      if (prevState) {
+        this._action.reset();  
+        this._action.setLoop(THREE.LoopOnce, 1);
+        this._action.clampWhenFinished = true;
+        this._action.crossFadeFrom(prevAction, 0.4, true);
+        this._action.play();
+      } else {
+        this._action.play();
+      }
+    }
+  
+    _Finished() {
+      this._Cleanup();
+      this._parent.SetState('idle');
+    }
+  
+    _Cleanup() {
+      if (this._action) {
+        this._action.getMixer().removeEventListener('finished', this._FinishedCallback);
+      }
+    }
+  
+    Exit() {
+      this._Cleanup();
+    }
+  
+    Update(_) {
+    }
+  };
+  
+  class AttackState_2 extends State {
+    constructor(parent) {
+      super(parent);
+  
+      this._action = null;
+  
+      this._FinishedCallback = () => {
+        this._Finished();
+      }
+    }
+  
+    get Name() {
+      return 'attack_2';
+    }
+  
+    Enter(prevState) {
+
+      this._action = this._parent._proxy.animations['attack_2'].action;
+      const mixer = this._action.getMixer();
+      mixer.addEventListener('finished', this._FinishedCallback);
+
+      if (prevState.Name != 'attack_1' && prevState.Name != 'attack_2') {
         const prevAction = this._parent._proxy.animations[prevState.Name].action;
   
         this._action.reset();  
@@ -204,7 +258,6 @@ export const player_state = (() => {
     }
   };
   
-  
   class RunState extends State {
     constructor(parent) {
       super(parent);
@@ -256,7 +309,6 @@ export const player_state = (() => {
     }
   };
   
-  
   class IdleState extends State {
     constructor(parent) {
       super(parent);
@@ -299,14 +351,103 @@ export const player_state = (() => {
     }
   };
 
+  class LoadingState extends State {
+    constructor(parent) {
+      super(parent);
+    }
+  
+    get Name() {
+      return 'loading';
+    }
+  
+    Enter(prevState) {
+      const idleAction = this._parent._proxy.animations['loading'].action;
+      if (prevState) {
+        const prevAction = this._parent._proxy.animations[prevState.Name].action;
+        idleAction.time = 0.0;
+        idleAction.enabled = true;
+        idleAction.setEffectiveTimeScale(1.0);
+        idleAction.setEffectiveWeight(1.0);
+        idleAction.crossFadeFrom(prevAction, 0.25, true);
+        idleAction.play();
+      } else {
+        idleAction.play();
+      }
+    }
+  
+    Exit() {
+    }
+  
+    Update(_, input) {
+      if (!input) {
+        return;
+      }
+  
+      if (input._keys.forward || input._keys.backward) {
+        this._parent.SetState('walk');
+      } else if (input._keys.space) {
+        this._parent.SetState('attack');
+      } else if (input._keys.backspace) {
+        this._parent.SetState('dance');
+      }
+    }
+  };
+
+  class HitState extends State {
+    constructor(parent) {
+      super(parent);
+    }
+  
+    get Name() {
+      return 'recieveHit';
+    }
+  
+    Enter(prevState) {
+      this._action = this._parent._proxy.animations['recieveHit'].action;
+
+      this._action.reset();  
+      this._action.setLoop(THREE.LoopOnce, 1);
+      this._action.clampWhenFinished = true;
+
+      if (prevState) {
+        const prevAction = this._parent._proxy.animations[prevState.Name].action;
+  
+        this._action.crossFadeFrom(prevAction, 1, true);
+        this._action.play();
+      } else {
+        this._action.play();
+      }
+    }
+  
+    Exit() {
+    }
+  
+    Update(_, input) {
+      if (!input) {
+        return;
+      }
+  
+      if (input._keys.forward || input._keys.backward) {
+        this._parent.SetState('walk');
+      } else if (input._keys.space) {
+        this._parent.SetState('attack');
+      } else if (input._keys.backspace) {
+        this._parent.SetState('dance');
+      }
+    }
+  };
+
   return {
     State: State,
     DanceState: DanceState,
-    AttackState: AttackState,
+    AttackState_1: AttackState_1,
+    AttackState_2: AttackState_2,
     IdleState: IdleState,
+    LoadingState: LoadingState,
     WalkState: WalkState,
     RunState: RunState,
     DeathState: DeathState,
+    HitState: HitState
   };
 
 })();

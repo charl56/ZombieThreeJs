@@ -18,9 +18,15 @@ export const entity_zombie = (() => {
 
     Init_() {
       this._AddState('idle', player_state.IdleState);
-      this._AddState('run', player_state.RunState);
+      this._AddState('loading', player_state.LoadingState);
+      this._AddState('walk', player_state.WalkState);
       this._AddState('death', player_state.DeathState);
-      this._AddState('shoot', player_state.AttackState);
+      this._AddState('attack_1', player_state.AttackState_1);
+      this._AddState('attack_2', player_state.AttackState_2);
+      this._AddState('recieveHit', player_state.HitState);
+
+      
+      // this._AddState('run', player_state.RunState);
     }
   };
 
@@ -63,10 +69,9 @@ export const entity_zombie = (() => {
 
     InitComponent() {
       this.RegisterHandler_('health.death', (m) => { this.OnDeath_(m); });
-      this.RegisterHandler_(
-          'update.position', (m) => { this.OnUpdatePosition_(m); });
-      this.RegisterHandler_(
-          'update.rotation', (m) => { this.OnUpdateRotation_(m); });
+      this.RegisterHandler_('health.update', (m) => { this.OnHit_(m); });
+      this.RegisterHandler_('update.position', (m) => { this.OnUpdatePosition_(m); });
+      this.RegisterHandler_('update.rotation', (m) => { this.OnUpdateRotation_(m); });
     }
 
     OnUpdatePosition_(msg) {
@@ -78,20 +83,53 @@ export const entity_zombie = (() => {
     }
 
     OnDeath_(msg) {
+      // Change animation
       this.stateMachine_.SetState('death');
+
+      setTimeout(() => {
+        // Get zombie list and index of zombie
+        const zombie_manager = this.Parent.parent_.entities_.find((obj) => obj.Name == "spawners").components_.ZombiesSpawn.zombieManager_;
+        const index_zombie = zombie_manager.findIndex((e) => e.Name === this.Parent.Name);
+        // If zombie in list
+        if(index_zombie != -1){
+          // Delete This zomb in manager
+          zombie_manager.splice(index_zombie, 1);
+          // Remove from the scene
+          this.params_.scene.remove(this.group_)
+
+          
+          //// !!!! Pas faire comme ça car si pas destroy, parti physique reste en collision et broadcast 
+          //// !!!! Donc si pas destroy, bloque lors de la collision
+
+          // // Delete entity
+          // const index_entity = this.Parent.parent_.entities_.findIndex((e) => e.Name === this.Parent.Name);
+          // this.Parent.parent_.entities_.splice(index_entity, 1);
+          // // Delete in entitiesMap
+          // if (this.Parent.Name in this.Parent.parent_.entitiesMap_) {
+          //   delete this.Parent.parent_.entitiesMap_[this.Parent.Name];
+          // }
+          
+
+        }
+      }, 2000)
+    
+    }
+
+
+    OnHit_(msg){
+      this.stateMachine_.SetState('recieveHit');
     }
 
     async LoadModels_() {
 
       const loader = this.FindEntity('loader').GetComponent('LoadController');
       const gltf = await loader.loadGLTF(this.zombieGltf_.gltf);
-      // this.animations_ = gltf.animations
-      // Equivalent mesh
+      // Mesh
       this.target_ = gltf.scene
 
       this.group_.add(this.target_);
       this.target_.scale.setScalar(1);
-
+      // Pos/Rot
       this.target_.position.set(0,-2,0);
       this.target_.rotateY(Math.PI);
       // Shadows
@@ -99,9 +137,8 @@ export const entity_zombie = (() => {
         c.castShadow = true;
         c.receiveShadow = true;
       });
-
+      // Load animation
       this.mixer_ = new THREE.AnimationMixer(this.target_);
-
       const _FindAnim = (animName) => {
         for (let i = 0; i < gltf.animations.length; i++) {
           if (gltf.animations[i].name.includes(animName)) {
@@ -115,14 +152,15 @@ export const entity_zombie = (() => {
         }
         return null;
       };
-
-      this.animations_['idle'] = _FindAnim('Idle');
+      // Set animations
+      this.animations_['loading'] = _FindAnim('Jump');
+      this.animations_['idle'] = _FindAnim('SitDown');
       this.animations_['walk'] = _FindAnim('Walk');
-      this.animations_['run'] = _FindAnim('Run');
       this.animations_['death'] = _FindAnim('Death');
-      this.animations_['attack'] = _FindAnim('Punch');
-      this.animations_['shoot'] = _FindAnim('Shoot');
-      // this.target_.visible = true;
+      this.animations_['attack_1'] = _FindAnim('PickUp');
+      this.animations_['attack_2'] = _FindAnim('Punch');
+      this.animations_['recieveHit'] = _FindAnim('RecieveHit');      
+      // this.animations_['run'] = _FindAnim('Run');
 
       this.stateMachine_ = new TargetFSM(
           new TargetCharacterControllerProxy(this.animations_));
@@ -131,15 +169,8 @@ export const entity_zombie = (() => {
         this.stateMachine_.SetState(this.queuedState_)
         this.queuedState_ = null;
       } else {
-        this.stateMachine_.SetState('idle');
+        this.stateMachine_.SetState('loading');
       }
-
-      // this.Broadcast({
-      //     topic: 'load.character',
-      //     model: this.group_,
-      //     bones: this.bones_,
-      // });
-      // this.Parent.SetPosition(this.Parent.Position);
     }
 
     FindPlayer_() {
@@ -153,11 +184,12 @@ export const entity_zombie = (() => {
     }
 
     UpdateAI_(timeElapsedS) {
+      // Distance to player
       const toPlayer = this.FindPlayer_();
       if(toPlayer === undefined) return;
       const dirToPlayer = toPlayer.clone().normalize();
-
-      if (toPlayer.length() == 0 || toPlayer.length() > 50) {
+      // State if to far of the player
+      if (toPlayer.length() > 18) {
         this.stateMachine_.SetState('idle');
         this.Parent.Attributes.Physics.CharacterController.setWalkDirection(new THREE.Vector3(0, 0, 0));
         return;
@@ -171,32 +203,38 @@ export const entity_zombie = (() => {
 
       this.Parent.SetQuaternion(_R);
 
-        if (toPlayer.length() < 3) {
-          this.stateMachine_.SetState('shoot');
-          this.Parent.Attributes.Physics.CharacterController.setWalkDirection(new THREE.Vector3(0, 0, 0));
-          return;
-        }
 
+
+      // Walk on front of, rotate to the player
       const forwardVelocity = 1;
       const strafeVelocity = 0;
-
+      
       const forward = new THREE.Vector3(0, 0, -1);
       forward.applyQuaternion(_R);
       forward.multiplyScalar(forwardVelocity * timeElapsedS * 2);
-  
+      
       const left = new THREE.Vector3(-1, 0, 0);
       left.applyQuaternion(_R);
       left.multiplyScalar(strafeVelocity * timeElapsedS * 2);
-
+      
       const walk = forward.clone().add(left);
       this.Parent.Attributes.Physics.CharacterController.setWalkDirection(walk);
-      this.stateMachine_.SetState('run');
+            
+      if (toPlayer.length() < 3.5) {
+        // Attack random
+        const anim = Math.random() < 0.5 ? 'attack_1' : 'attack_2'
+        this.stateMachine_.SetState(anim);
+      } else {
+        this.stateMachine_.SetState('walk');
+      }
     }
 
     Update(timeInSeconds) {
       if (!this.stateMachine_) {
         return;
       }
+      // console.log(this.Parent.Manager.entities_)
+
       const input = this.GetComponent('BasicCharacterControllerInput');
       this.stateMachine_.Update(timeInSeconds, input);
     
@@ -213,120 +251,43 @@ export const entity_zombie = (() => {
           time: this.stateMachine_._currentState._action.time,
         });
       }
-
-      this.UpdateAI_(timeInSeconds);
-
-      // // VIDEO HACK
-      // switch (this.stateMachine_.State) {
-      //   case 'idle': {
-      //     this.UpdateAI_(timeInSeconds);
-      //     break;
-      //   }
-      //   case 'run': {
-      //     this.UpdateAI_(timeInSeconds);
-      //     break;
-      //   }
-      //   case 'shoot': {
-      //     break;
-      //   }
-      //   case 'death': {
-      //     this.Parent.Attributes.Physics.CharacterController.setWalkDirection(new THREE.Vector3(0, 0, 0));
-      //     break;
-      //   }
-      // }
-
-      // this.Parent.Attributes.Physics.CharacterController.setWalkDirection(walk);
-      // this.body_.motionState_.getWorldTransform(this.body_.transform_);
+      // Update state of zombie
+      switch (this.stateMachine_.State) {
+        case 'idle': {
+          this.UpdateAI_(timeInSeconds);
+          break;
+        }
+        case 'loading': {
+          this.UpdateAI_(timeInSeconds);
+          break;
+        }
+        case 'walk': {
+          this.UpdateAI_(timeInSeconds);
+          break;
+        }
+        case 'attack_1': {
+          this.UpdateAI_(timeInSeconds);
+          break;
+        }
+        case 'attack_2': {
+          this.UpdateAI_(timeInSeconds);
+          break;
+        }
+        case 'recieveHit': {
+          this.UpdateAI_(timeInSeconds);
+          break;
+        }
+        case 'death': {
+          this.Parent.Attributes.Physics.CharacterController.setWalkDirection(new THREE.Vector3(0, 0, 0));
+          break;
+        }
+      }
+      
       const t = this.Parent.Attributes.Physics.CharacterController.body_.getWorldTransform();
       const pos = t.getOrigin();
       const pos3 = new THREE.Vector3(pos.x(), pos.y(), pos.z());
 
       this.Parent.SetPosition(pos3);
-
-      // // HARDCODED
-      // this.Broadcast({
-      //     topic: 'player.action',
-      //     action: this.stateMachine_._currentState.Name,
-      // });
-
-      // const currentState = this.stateMachine_._currentState;
-      // if (currentState.Name != 'walk' &&
-      //     currentState.Name != 'run' &&
-      //     currentState.Name != 'idle') {
-      //   return;
-      // }
-    
-      // const velocity = this.velocity_;
-      // const frameDecceleration = new THREE.Vector3(
-      //     velocity.x * this.decceleration_.x,
-      //     velocity.y * this.decceleration_.y,
-      //     velocity.z * this.decceleration_.z
-      // );
-      // frameDecceleration.multiplyScalar(timeInSeconds);
-      // frameDecceleration.z = Math.sign(frameDecceleration.z) * Math.min(
-      //     Math.abs(frameDecceleration.z), Math.abs(velocity.z));
-  
-      // velocity.add(frameDecceleration);
-  
-      // const controlObject = this.group_;
-      // const _Q = new THREE.Quaternion();
-      // const _A = new THREE.Vector3();
-      // const _R = controlObject.quaternion.clone();
-  
-      // const acc = this.acceleration_.clone();
-      // if (input._keys.shift) {
-      //   acc.multiplyScalar(2.0);
-      // }
-  
-      // if (input._keys.forward) {
-      //   velocity.z += acc.z * timeInSeconds;
-      // }
-      // if (input._keys.backward) {
-      //   velocity.z -= acc.z * timeInSeconds;
-      // }
-      // if (input._keys.left) {
-      //   _A.set(0, 1, 0);
-      //   _Q.setFromAxisAngle(_A, 4.0 * Math.PI * timeInSeconds * this.acceleration_.y);
-      //   _R.multiply(_Q);
-      // }
-      // if (input._keys.right) {
-      //   _A.set(0, 1, 0);
-      //   _Q.setFromAxisAngle(_A, 4.0 * -Math.PI * timeInSeconds * this.acceleration_.y);
-      //   _R.multiply(_Q);
-      // }
-  
-      // controlObject.quaternion.copy(_R);
-  
-      // const oldPosition = new THREE.Vector3();
-      // oldPosition.copy(controlObject.position);
-  
-      // const forward = new THREE.Vector3(0, 0, 1);
-      // forward.applyQuaternion(controlObject.quaternion);
-      // forward.normalize();
-  
-      // const sideways = new THREE.Vector3(1, 0, 0);
-      // sideways.applyQuaternion(controlObject.quaternion);
-      // sideways.normalize();
-  
-      // sideways.multiplyScalar(velocity.x * timeInSeconds);
-      // forward.multiplyScalar(velocity.z * timeInSeconds);
-  
-      // const pos = controlObject.position.clone();
-      // pos.add(forward);
-      // pos.add(sideways);
-
-      // const collisions = this._FindIntersections(pos, oldPosition);
-      // if (collisions.length > 0) {
-      //   return;
-      // }
-
-      // const terrain = this.FindEntity('terrain').GetComponent('TerrainChunkManager');
-      // pos.y = terrain.GetHeight(pos)[0];
-
-      // controlObject.position.copy(pos);
-  
-      // this.Parent.SetPosition(controlObject.position);
-      // this.Parent.SetQuaternion(controlObject.quaternion);
     }
   };
     

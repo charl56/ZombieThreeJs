@@ -81,7 +81,7 @@ export const render_component = (() => {
       this.group_.add(this.target_);
       this.group_.position.copy(this.Parent.Position);
       this.group_.quaternion.copy(this.Parent.Quaternion);
-
+      
       this.target_.scale.copy(this.params_.scale);
       if (this.params_.offset) {
         this.offset_ = this.params_.offset;

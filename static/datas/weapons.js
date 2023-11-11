@@ -11,8 +11,8 @@ let weapons = {
         parameters: {                           // Parametres de l'armes    
             positionAimY: 0.12,                     // Position en mode visé
             positionNotAim: 0,                      // Position non visé
-            shootTimer: 100,                        // Cadence de tire
-            loadTimer: 2000,                        // Temps de chargement
+            shootTimer: 0.1,                        // Cadence de tire
+            loadTimer: 2,                        // Temps de chargement
             loader: 15,                             // Balles par chargeur
             remainBullets: 15,                      // Balles restantes dans le chargeur
             remainLoaders: 4,                        // Chargeurs restants
@@ -33,8 +33,8 @@ let weapons = {
         parameters: {
             positionAimY: 0.12,
             positionNotAim: 0,
-            shootTimer: 100,
-            loadTimer: 2000,
+            shootTimer: 0.1,
+            loadTimer: 2,
             loader: 15,
             remainBullets: 15,
             remainLoaders: 4,
@@ -55,8 +55,8 @@ let weapons = {
         parameters: {
             positionAimY: 0.1,
             positionNotAim: 0,
-            shootTimer: 500,
-            loadTimer: 2000,
+            shootTimer: 0.5,
+            loadTimer: 2,
             loader: 8,
             remainBullets: 8,
             remainLoaders: 4,
@@ -77,8 +77,8 @@ let weapons = {
         parameters: {
             positionAimY: 0.15,
             positionNotAim: 0,
-            shootTimer: 100,
-            loadTimer: 1500,
+            shootTimer: 0.1,
+            loadTimer: 1.5,
             loader: 30,
             remainBullets: 30,
             remainLoaders: 4,
@@ -99,8 +99,8 @@ let weapons = {
         parameters: {
             positionAimY: 0.15,
             positionNotAim: 0,
-            shootTimer: 100,
-            loadTimer: 1500,
+            shootTimer: 0.1,
+            loadTimer: 1.5,
             loader: 30,
             remainBullets: 30,
             remainLoaders: 4,
@@ -121,8 +121,8 @@ let weapons = {
         parameters: {
             positionAimY: 0.15,
             positionNotAim: 0,
-            shootTimer: 100,
-            loadTimer: 1500,
+            shootTimer: 0.1,
+            loadTimer: 1.5,
             loader: 30,
             remainBullets: 30,
             remainLoaders: 4,
@@ -143,8 +143,8 @@ let weapons = {
         parameters: {
             positionAimY: 0.15,
             positionNotAim: 0,
-            shootTimer: 100,
-            loadTimer: 2000,
+            shootTimer: 0.1,
+            loadTimer: 2,
             loader: 30,
             remainBullets: 30,
             remainLoaders: 4,
@@ -165,8 +165,8 @@ let weapons = {
         parameters: {
             positionAimY: 0.09,
             positionNotAim: 0,
-            shootTimer: 1200,
-            loadTimer: 3000,
+            shootTimer: 1.2,
+            loadTimer: 3,
             loader: 5,
             remainBullets: 5,
             remainLoaders: 4,
@@ -187,8 +187,8 @@ let weapons = {
         parameters: {
             positionAimY: 0.09,
             positionNotAim: 0,
-            shootTimer: 1200,
-            loadTimer: 3000,
+            shootTimer: 1.2,
+            loadTimer: 3,
             loader: 5,
             remainBullets: 5,
             remainLoaders: 4,
@@ -209,8 +209,8 @@ let weapons = {
         parameters: {
             positionAimY: 0.17,
             positionNotAim: 0,
-            shootTimer: 2000,
-            loadTimer: 2000,
+            shootTimer: 2.0,
+            loadTimer: 2,
             loader: 2,
             remainBullets: 2,
             remainLoaders: 4,
@@ -231,8 +231,8 @@ let weapons = {
         parameters: {
             positionAimY: 0.17,
             positionNotAim: 0,
-            shootTimer: 2000,
-            loadTimer: 2000,
+            shootTimer: 2.0,
+            loadTimer: 2,
             loader: 2,
             remainBullets: 2,
             remainLoaders: 4,
@@ -253,8 +253,8 @@ let weapons = {
         parameters: {
             positionAimY: 0.17,
             positionNotAim: 0,
-            shootTimer: 200,
-            loadTimer: 2000,
+            shootTimer: 0.2,
+            loadTimer: 2,
             loader: 10,
             remainBullets: 10,
             remainLoaders: 4,
@@ -270,8 +270,8 @@ let weapons = {
         parameters: {
             positionAimY: 0.17,
             positionNotAim: 0,
-            shootTimer: 170,
-            loadTimer: 2000,
+            shootTimer: 0.17,
+            loadTimer: 2,
             loader: 1,
             remainBullets: '∞',
             remainLoaders: '∞',
@@ -282,4 +282,4 @@ let weapons = {
     },
 }
 
-export default weapons
+export {weapons}

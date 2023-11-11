@@ -136,14 +136,14 @@ export const load_controller = (() => {
       }
     }
 
-    loadMTL(path) {                  // Decoupe de la fonction setWeapons, pour les await/async
+    loadMTL(path) {                  
       return new Promise((resolve, reject) => {
           const mtlLoader = new MTLLoader();
           mtlLoader.load(path, resolve, undefined, reject);
       });
     }
 
-    loadOBJ(path, materials) {       // Decoupe de la fonction setWeapons, pour les await/async
+    loadOBJ(path, materials) {      
       return new Promise((resolve, reject) => {
           const objLoader = new OBJLoader();
           objLoader.setMaterials(materials);

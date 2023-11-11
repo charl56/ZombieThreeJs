@@ -2941,7 +2941,7 @@ let spawnsCoord = {
     6: {
         x: 2,
         y: 5,
-        z: 4,
+        z: 7,
     },
 }
 

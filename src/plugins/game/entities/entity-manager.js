@@ -37,6 +37,20 @@ export const entity_manager = (() => {
       e.InitEntity();
     }
 
+    Remove(e) {
+      // // Entities
+      // const index = this.entities_.indexOf(e);
+      // if (index !== -1) {
+      //   this.entities_.splice(index, 1); // Supprimer l'élément du tableau
+      // }
+      // // Entities map
+      // const entityMapZombie = this.entitiesMap_[e.Name];
+      // if (entityMapZombie) {
+      //     delete this.entitiesMap_[e.Name]; // Supprimer la propriété de l'objet
+      // }
+
+    }
+
     SetActive(e, b) {
       const i = this.entities_.indexOf(e);
 
@@ -64,6 +78,7 @@ export const entity_manager = (() => {
     UpdatePass_(timeElapsedS, pass) {
       const dead = [];
       const alive = [];
+
       for (let i = 0; i < this.entities_.length; ++i) {
         const e = this.entities_[i];
 

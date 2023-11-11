@@ -95,7 +95,6 @@ export const entity = (() => {
     }
 
     Broadcast(msg) {
-      // console.log("BroadCast : ", msg)
       if (this.IsDead) {
         return;
       }

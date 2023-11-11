@@ -57,7 +57,6 @@ export const player_input = (() => {
       if (this.previous_ === null) {
         this.previous_ = {...this.current_};
       }
-      
       this.current_.mouseXDelta = (e.movementX * 1)
       this.current_.mouseYDelta = (e.movementY * 1)
     }
@@ -106,6 +105,10 @@ export const player_input = (() => {
 
     mouseLeftReleased(checkPrevious=true) {
       return (!this.current_.leftButton && this.previous_.leftButton);
+    }
+
+    mouseRightReleased(checkPrevious=true) {
+      return (this.current_.rightButton && this.previous_.rightButton);
     }
 
     isReady() {

@@ -114,7 +114,8 @@ export const basic_rigid_body = (() => {
       this.RegisterHandler_('physics.collision', (m) => { this.OnCollision_(m); });
     }
 
-    OnCollision_() {
+    OnCollision_(m) {
+      // console.log("collision", m.value)
     }
 
     OnPosition_(m) {
@@ -128,6 +129,7 @@ export const basic_rigid_body = (() => {
     OnTransformChanged_() {
       this.box_.setFromObject(this.Parent.Attributes.Render.group);
 
+      
       const quat = this.Parent.Quaternion;
       const ms = this.body_.motionState_;
       const t = this.body_.transform_;

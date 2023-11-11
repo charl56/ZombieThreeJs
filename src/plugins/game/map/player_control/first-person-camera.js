@@ -113,6 +113,7 @@ export const first_person_camera = (() => {
 
     updateHeadBob_(timeElapsedS) {
       if (this.headBobActive_) {
+        
         const wavelength = Math.PI;
         const nextStep = 1 + Math.floor(((this.headBobTimer_ + 0.000001) * this.headBobSpeed_) / wavelength);
         const nextStepTime = nextStep * wavelength / this.headBobSpeed_;
