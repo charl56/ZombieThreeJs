@@ -98,7 +98,7 @@ export const health_component = (() => {
 
     OnDamage_(msg) {
       const oldHealth = this.stats_.health;
-      this.stats_.health = Math.max(0.0, this.stats_.health - 25);
+      this.stats_.health = Math.max(0.0, this.stats_.health - msg.damage);
       if (oldHealth != this.stats_.health) {
         this.OnHealthChanged_();
       }

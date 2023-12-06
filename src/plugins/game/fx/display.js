@@ -10,7 +10,8 @@ export const display = (() => {
       super();
       this.params_ = params;
       this.Init_();
-      this.previosRound_ = 0;
+      this.previousRound_ = 0;
+      this.weaponLoaded_ = false;
     }
 
     Init_() {
@@ -22,9 +23,10 @@ export const display = (() => {
         this.roundD_ = document.getElementById('round-img-d').children[1];
         // Bullets
         this.bullets_ = document.getElementById('bullets');
-        this.bulletInMagazine = document.getElementById('bullet-in-magazine');
-        this.bulletAllMagazines = document.getElementById('bullet-all-magazines');
-        this.weaponName = document.getElementById('weapon-name');
+        this.bulletInMagazine_ = document.getElementById('bullet-in-magazine');
+        this.bulletAllMagazines_ = document.getElementById('bullet-all-magazines');
+        this.weaponName_ = document.getElementById('weapon-name');
+        this.progressLinearBullet_ = document.getElementById('progress-linear-bullet');
     }
 
     SeparateDigits(number) {
@@ -52,10 +54,10 @@ export const display = (() => {
     UpdateRound_(){   // Update round
       // Get round number
       const round = this.Parent.parent_.entities_.find((obj) => obj.Name == "spawners").components_.ZombiesSpawn.round_;
-      if(this.previosRound_ == round){
+      if(this.previousRound_ == round){
         return
       }
-      this.previosRound_ = round;
+      this.previousRound_ = round;
       const tabRound = this.SeparateDigits(round)
       // Set display
       if(round < 10){
@@ -76,9 +78,40 @@ export const display = (() => {
     }
 
     UpdateBullets_(data){
-      this.bulletInMagazine.innerText = data.bullet;
-      this.bulletAllMagazines.innerText = data.magazine * data.nbMagazine;
-      this.weaponName.innerText = data.name; 
+      if(data.bullet < (data.magazine/4)){
+        this.progressLinearBullet_.children[1].style.backgroundColor = "red";   // Color of progress bar
+        this.bulletInMagazine_.style.color = "red";                             // Color of bulle nb  
+        this.bulletInMagazine_.innerText = data.bullet;                         // Nb of bullet
+      } else {
+        this.progressLinearBullet_.children[1].style.backgroundColor = "white";
+        this.bulletInMagazine_.style.color = "white";
+        this.bulletInMagazine_.innerText = data.bullet;
+      }
+
+      if(data.nbMagazine < 2){
+        this.bulletAllMagazines_.style.color = "red";
+      } else {
+        this.bulletAllMagazines_.style.color = "white";
+      }
+
+      this.bulletAllMagazines_.innerText = data.magazine * data.nbMagazine;     // Bullets in all magazines
+      this.weaponName_.innerText = data.name;                                   // Weapon name
+
+      if(data.bullet == data.magazine && !this.weaponLoaded_){
+          this.weaponLoaded_ = true
+          let loaderValue = 0                    // Valeur chargement à 0
+          let wait = (data.loadTimer * 100)         // Divise le temps de chargement par 100, pour le loader (valeur de 0-100 )
+          let loadInterval = setInterval(() => {                     // Incrément de 1 tous les loadTimer/100
+            loaderValue += 10
+            this.progressLinearBullet_.children[1].style.width = loaderValue + "%"  
+              if(loaderValue == 100){         // Quand chargrment finis
+                  clearInterval(loadInterval);        // On arrête la boucle 
+              }
+          }, wait)      
+      } else {
+        this.weaponLoaded_ = false
+        this.progressLinearBullet_.children[1].style.width = parseInt((data.bullet/data.magazine) * 100) + "%"
+      }
     }
 
 

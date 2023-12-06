@@ -11,7 +11,7 @@ import {map_builder} from './map/zombie-map-builder.js'
 import {zombies_spawn} from './map/zombie-spawn.js'
 // Setup player input, FPC, kinematic controller
 import {player} from './map/player.js';          
-
+// Gun effect
 import {blaster} from './fx/blaster.js';
 
 
@@ -20,6 +20,7 @@ export class QuickFPS1 {
   constructor(ammo) {
     this._Initialize();
     this.ammo_ = ammo
+    this.gamePause_ = false;
   }
 
   _Initialize() {
@@ -78,7 +79,6 @@ export class QuickFPS1 {
     spawner.AddComponent(new map_builder.Build(basicParams));
     // Zombie part (spawn, round...)
     spawner.AddComponent(new zombies_spawn.ZombiesSpawn(basicParams));
- 
     
     // Wait to spawn player
     const intervalLoop_ = setInterval(() => {
@@ -92,6 +92,7 @@ export class QuickFPS1 {
       // Player
       spawner.AddComponent(new player.SetUp(basicParams));
       spawner.GetComponent('SetUp').Spawn();
+
       // Stop interval
       clearInterval(intervalLoop_);
     }
@@ -117,11 +118,11 @@ export class QuickFPS1 {
     const timeElapsedS = Math.min(1.0 / 30.0, timeElapsed * 0.001);
 
     this.entityManager_.Update(timeElapsedS);
-    // Update AmmoJs part & ThreeJs part 
-    this.ammojs_.StepSimulation(timeElapsedS);
-    this.threejs_.Render(timeElapsedS);
-
-    // console.log(this.entityManager_.entitiesMap_)
+    // Update AmmoJs part & ThreeJs part, if game not paused
+    if(!this.gamePause_){
+      this.ammojs_.StepSimulation(timeElapsedS);
+      this.threejs_.Render(timeElapsedS);
+    }
   }
 }
 

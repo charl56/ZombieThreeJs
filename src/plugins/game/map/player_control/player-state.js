@@ -34,7 +34,7 @@ export const player_state = (() => {
       if (prevState) {
         const prevAction = this._parent._proxy.animations[prevState.Name].action;
   
-        this._action.crossFadeFrom(prevAction, 1, true);
+        this._action.crossFadeFrom(prevAction, 1, false);   // From : acutal action to new action :death
         this._action.play();
       } else {
         this._action.play();

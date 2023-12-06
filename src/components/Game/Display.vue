@@ -20,9 +20,14 @@
                     <p id="weapon-name">Weapon name</p>
                 </div>
                 <div class="d-flex align-center justify-center">
-                    <p id="bullet-in-magazine">15</p>
-                    <p>/</p>
-                    <p id="bullet-all-magazines">60</p>
+                    <div class="d-flex">
+                        <v-progress-linear id="progress-linear-bullet" class="progress-linear mx-2" model-value="67"></v-progress-linear>
+                    </div>
+                    <div class="d-flex">
+                        <p id="bullet-in-magazine">15</p>
+                        <p>/</p>
+                        <p id="bullet-all-magazines">60</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -110,6 +115,15 @@ export default {
     font-weight: lighter;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     visibility: hidden;
+    transform: skew(-20
+    deg, 0deg);
+}.progress-linear{
+    height: 30px !important;
+    width: 30px !important;
+    rotate: -90deg;
+    transform: translateX(0) !important;
+    right: 0 !important;
+    left: 0 !important;
 }
 
 

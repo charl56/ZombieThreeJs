@@ -7,6 +7,7 @@ import {weapons} from '../../../../../static/datas/weapons.js'
 import {render_component} from '../../render-component.js';
 import {passes} from '../../passes.js';
 import {math} from '../../math.js';
+import { h } from 'vue';
 
 
 export const gun_controller = (() => {
@@ -37,6 +38,7 @@ export const gun_controller = (() => {
       this.nbMagazine_ = 0;
       this.loadTimer_ = 0;
       this.weaponName_ = '';
+      this.damage_ = 0;
     }
 
     Destroy() {
@@ -97,12 +99,13 @@ export const gun_controller = (() => {
       this.gun_ = e;
       DEFAULT_COOLDOWN = weapon.parameters.shootTimer;
       DEFAULT_LOAD_TIMER = weapon.parameters.loadTimer;
+      this.magazine_ = weapon.parameters.remainBullets;
       this.bullets_ = weapon.parameters.loader;
-      this.magazine_ = weapon.parameters.remainBullets
       this.nbMagazine_ = weapon.parameters.remainLoaders; 
-      this.weaponName_ = name
+      this.weaponName_ = name;
+      this.damage_ = weapon.parameters.damage
       // Set 
-      const data = {"bullet": this.bullets_, "magazine": this.magazine_, "nbMagazine": this.nbMagazine_, "name": this.weaponName_}
+      const data = {"bullet": this.bullets_, "magazine": this.magazine_, "nbMagazine": this.nbMagazine_, "name": this.weaponName_, "loadTimer": this.loadTimer_}
       this.FindEntity('player').GetComponent('Displays').UpdateBullets_(data);
 
       // Gun Rota
@@ -173,18 +176,19 @@ export const gun_controller = (() => {
       // VIDEO HACK
       const fired = input.mouseLeftReleased();
       if (fired) {
-
-        // Bullets and magazines
+        if(this.bullets_ == 0 && this.nbMagazine_ == 0){
+          return
+        }
         this.bullets_ --
+        // Bullets and magazines
         if(this.bullets_ == 0 && this.nbMagazine_ > 0){
           this.nbMagazine_ --
           this.bullets_ = this.magazine_
           this.loadTimer_ = DEFAULT_LOAD_TIMER
-        } else if(this.bullets_ == 0 && this.nbMagazine_ == 0){
-          return
-        }
+        } 
+
         // Update bullets display
-        const data = {"bullet": this.bullets_, "magazine": this.magazine_, "nbMagazine": this.nbMagazine_, "name": this.weaponName_}
+        const data = {"bullet": this.bullets_, "magazine": this.magazine_, "nbMagazine": this.nbMagazine_, "name": this.weaponName_, "loadTimer": this.loadTimer_}
         this.FindEntity('player').GetComponent('Displays').UpdateBullets_(data);
 
         // Shoot sound
@@ -236,10 +240,11 @@ export const gun_controller = (() => {
 
           if (mesh.Attributes.NPC) {
             if (mesh.Attributes.Stats.health > 0) {
-              mesh.Broadcast({topic: 'shot.hit', position: hits[i].position, start: this.Parent.Position, end: end});
-              return;
+              mesh.Broadcast({topic: 'shot.hit', damage: this.damage_, position: hits[i].position, start: this.Parent.Position, end: end});
             }
             continue;
+          } else {
+            return  // If obstacl, can't touch zombie behind 
           }
       
           // mesh.Attributes.Render.group.traverse(c => {

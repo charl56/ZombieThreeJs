@@ -39,6 +39,7 @@ export const zombies_spawn = (() => {
         const zombieGltf = targetItems["zombieMale"]
         // Set zombie, depend of round
         let zombieNumber_ = (this.round_ * 1.41) + 2.6
+        let zombieLife_ = this.round_ * 10
         // Get zombies
         this.zombieManager_ = []
         // For number of zombie per round
@@ -52,7 +53,7 @@ export const zombies_spawn = (() => {
                 const zombie = new entity.Entity();
                 zombie.AddComponent(new entity_zombie.TargetCharacterController(this.params_, zombieGltf));
                 zombie.AddComponent(new kinematic_character_controller.KinematicCharacterController(this.params_));
-                zombie.AddComponent(new health_component.HealthComponent({health: 50, maxHealth: 50}));
+                zombie.AddComponent(new health_component.HealthComponent({health: zombieLife_, maxHealth: zombieLife_}));
                 // zombie.AddComponent(new basic_rigid_body.CharacterRigidBody(this.params_));
                 
                 this.Manager.Add(zombie, 'zombie_'+i);

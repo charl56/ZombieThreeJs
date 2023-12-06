@@ -111,7 +111,7 @@ export const entity_zombie = (() => {
           
 
         }
-      }, 2000)
+      }, 4000)
     
     }
 

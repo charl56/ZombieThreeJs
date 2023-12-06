@@ -12,6 +12,7 @@ export const player_input = (() => {
     'SPACE': 32,
     'SHIFT_L': 16,
     'CTRL_L': 17,
+    'PAUSE': 80, // 'p'
   };
 
   class PlayerInput extends entity.Component {
@@ -101,6 +102,13 @@ export const player_input = (() => {
 
     key(keyCode) {
       return !!this.keys_[keyCode];
+    }
+
+    pauseMenuReleased(checkPrevious=true){
+      if(this.keys_[KEYS.PAUSE] === undefined){
+        this.keys_[KEYS.PAUSE] = false
+      }
+      return (this.keys_[KEYS.PAUSE])
     }
 
     mouseLeftReleased(checkPrevious=true) {
